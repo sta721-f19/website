@@ -2,11 +2,15 @@
 .Rhistory
 .RData
 .Ruserdata
+website.Rproj
 static/lectures/*/*.toc
 static/lectures/*/*.nav
 static/lectures/*/*.log
 static/lectures/*/*.aux
 static/lectures/*/*.snm
 static/lectures/*/*.dvi
-website.Rproj
+static/lectures/*/*.synctex.gz
+static/lectures/*/*.html
 static/lectures/*.Rproj
+
+static/talk/*.html
