@@ -2,10 +2,11 @@
 .Rhistory
 .RData
 .Ruserdata
-static/*/*/*.toc
-static/*/*/*.nav
-static/*/*/*.log
-static/*/*/*.aux
-static/*/*/*.snm
-static/*/*/*.dvi
+static/lectures/*/*.toc
+static/lectures/*/*.nav
+static/lectures/*/*.log
+static/lectures/*/*.aux
+static/lectures/*/*.snm
+static/lectures/*/*.dvi
 website.Rproj
+static/lectures/*.Rproj

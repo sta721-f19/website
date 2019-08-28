@@ -18,7 +18,7 @@ weight = 50
 |:--:|:-------------:|:---------------------------|:---|
 | 1  | 08-26-2018 | [Introduction](publication/intro/) |    |
 |    | 08-28-2018 | [MLE](publication/mle/) | |
-| 2  | 09-02-2018 | [Projections & Expectations ](publication/projections/) |  [HW1](talk/HW1/) |
+| 2  | 09-02-2018 | [Projections & Expectations ](publication/projections/) |  [HW1](talk/hw01/) |
 |    | 09-04-2018 | [Normal Theory](publication/normal-theory/) |   |
 | 3  | 09-09-2018 | [Sampling Distributions](publication/samplingdist/) | [HW2](talk/hw02)  |
 |    | 09-11-2018 | [Prediction](publication/prediction/) |   |
