@@ -49,7 +49,7 @@ This course introduces students to Gaussian linear models and extensions for mod
 
 | Name  | email |  location | office hours |
 |:---------------------|:----------------------|:------------|:-----------|
-| [Dr. Merlise Clyde ](http://stat.duke.edu/~clyde) | [clyde@duke.edu](mailto:clyde@duke.edu) | 214A Old Chem | Wed 3-4 & Fri 2:15-3:15 or by appointment|
+| [Dr. Merlise Clyde ](http://stat.duke.edu/~clyde) | [clyde@duke.edu](mailto:clyde@duke.edu) | 223E Old Chem | Wed 3-4 & Fri 2:15-3:15 or by appointment|
 | [Vittorio Orlandi (TA)](http://stat.duke.edu/people/vittorio-orlandi)|[vittorio.orlandi@duke.edu](mailto:vittorio.orlandi@duke.edu) | TBA | TBA |
 | [Pritam Dey (TA)](http://stat.duke.edu/people/pritam-dey)|[pritam.dey@duke.edu](mailto:pritam.dey@duke.edu) | TBA | TBA |
 

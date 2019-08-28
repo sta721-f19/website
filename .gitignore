@@ -2,3 +2,10 @@
 .Rhistory
 .RData
 .Ruserdata
+static/*/*/*.toc
+static/*/*/*.nav
+static/*/*/*.log
+static/*/*/*.aux
+static/*/*/*.snm
+static/*/*/*.dvi
+

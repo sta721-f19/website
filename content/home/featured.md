@@ -8,7 +8,7 @@ headless = true  # This file represents a page section.
 active = true  # Activate this widget? true/false
 weight = 20  # Order that this section will appear.
 
-title = "Featured Lectures"
+title = "Current Lectures"
 subtitle = ""
 
 [content]
@@ -16,7 +16,7 @@ subtitle = ""
   page_type = "publication"
   
   # Choose how much pages you would like to display (0 = all pages)
-  count = 0
+  count = 1
 
   # Page order. Descending (desc) or ascending (asc) date.
   order = "desc"
@@ -64,6 +64,4 @@ subtitle = ""
  css_class = ""
 +++
 
-{{% alert note %}}
-Coming soon!
-{{% /alert %}}
+

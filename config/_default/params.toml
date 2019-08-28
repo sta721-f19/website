@@ -63,8 +63,8 @@ address = "223 Old Chemistry Building "
 
 
 # Office hours: use `<br>` to insert a line break, or set to "" to remove office hours
-office_hours = """Tuesday 10:00 to 11:00<br>
-                  Friday  1:00 to 2:00"""
+office_hours = """Tuesday 2:30:00 to 3:30<br>
+                  Friday  1:15 to 2:15"""
 
 # Enter an optional link for booking appointments (e.g. calendly.com).
 appointment_url = "https://calendar.google.com/calendar?cid=bWVybGlzZS5jbHlkZUBnbWFpbC5jb20"
@@ -131,7 +131,7 @@ section_pager = false
 docs_section_pager = true  # Display pager in Docs layout (e.g. tutorials)?
 
 # Enable in-built social sharing buttons? (true/false)
-sharing = true
+sharing = false
 
 # Configuration of publication pages.
 [publications]
