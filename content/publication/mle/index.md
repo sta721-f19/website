@@ -1,5 +1,6 @@
 ---
 draft: false
+featured: true
 abstract: "Maximum likelihood estimation in linear models via projections."
 abstract_short: "Maximum likelihood estimation in linear models via projections.  Click on Details for additional information and supporting material"
 authors: ["Merlise Clyde"]
@@ -9,7 +10,6 @@ math: true
 publication_types: []
 publication: ""
 publication_short: ""
-selected: true
 title: "Maximum Likelihood Estimation"
 url_code: ""
 url_source: "lectures/MLES/mles.tex"
@@ -17,7 +17,7 @@ url_dataset: ""
 links:
  - name: Readings
    url: "http://getitatduke.library.duke.edu/?sid=sersol&SS_jc=TC0000508493&title=Plane%20Answers%20to%20Complex%20Questions%3A%20The%20Theory%20of%20Linear%20Models"
-url_project: "http://github.com/sta721-F19/website/static/lectures/MLES/"
+url_project: "http://github.com/sta721-F19/website/tree/master/static/lectures/MLES/"
 url_slides: "lectures/MLES/mles.pdf"
 url_video: ""
 
