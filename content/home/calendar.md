@@ -17,15 +17,15 @@ weight = 50
 | Week |  Date      | Topic |   HW |
 |:--:|:-------------:|:---------------------------|:---|
 | 1  | 08-26-2018 | [Introduction](publication/intro/) |    |
-|    | 08-28-2018 | [MLE](publication/mle/) | [HW1](talk/hw01) |
-| 2  | 09-02-2018 | [Projections & Expectations ](publication/projections/) | |
-|    | 09-04-2018 | [Normal Theory](publication/normal-theory/) |  [HW2](talk/hw02) |
-| 3  | 09-09-2018 | [Sampling Distributions](publication/samplingdist/) |  |
-|    | 09-11-2018 | [Prediction](publication/prediction/) |  [HW3](talk/hw03) |
-| 4  | 09-16-2018 | [Gauss-Markov and Prediction](publication/gauss-markov/) | |  
+|    | 08-28-2018 | [MLE](publication/mle/) | |
+| 2  | 09-02-2018 | [Projections & Expectations ](publication/projections/) |  [HW1](talk/HW1/) |
+|    | 09-04-2018 | [Normal Theory](publication/normal-theory/) |   |
+| 3  | 09-09-2018 | [Sampling Distributions](publication/samplingdist/) | [HW2](talk/hw02)  |
+|    | 09-11-2018 | [Prediction](publication/prediction/) |   |
+| 4  | 09-16-2018 | [Gauss-Markov and Prediction](publication/gauss-markov/) | [HW3](talk/hw03) |  
 |    | 09-18-2018 | [Transformations & Normality](publication/boxcox) | [Data Analysis]|
-| 5  | 09-23-2018 | [Bayes Estimation in Linear Models](publication/bayes-intro) |   |
-|    | 09-25-2018 | [Conjugate Priors in Linear Models](publication/conjugate-priors) | [HW4](talk/hw04)  |
+| 5  | 09-23-2018 | [Bayes Estimation in Linear Models](publication/bayes-intro) |  [HW4](talk/hw04)  |
+|    | 09-25-2018 | [Conjugate Priors in Linear Models](publication/conjugate-priors) |  |
 | 6  | 09-30-2018 | Non-informative Priors | |
 |    | 10-02-2018 |  [G-Priors and Prior Choices](publication/gpriors-and-mixtures) | |
 |    | 10-04-2018 | Midterm | |

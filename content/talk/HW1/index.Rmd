@@ -1,0 +1,103 @@
+---
+title: "HW1"
+abstract_short: ''
+date: '2019-08-28'
+draft: no
+math: yes
+selected: yes
+abstract: ''
+event: ""
+links:
+  - name: "Readings"
+    url: "http://getitatduke.library.duke.edu/?sid=sersol&SS_jc=TC0000508493&title=Plane%20Answers%20to%20Complex%20Questions%3A%20The%20Theory%20of%20Linear%20Models"
+url_slides: ''
+url_video: ''
+---
+
+**Due 09/09/2019 11:00 PM**
+
+
+
+1. Exercise 1.11 [Christensen](http://getitatduke.library.duke.edu/?sid=sersol&SS_jc=TC0000508493&title=Plane%20Answers%20to%20Complex%20Questions%3A%20The%20Theory%20of%20Linear%20Models)  (review notes on expectations and covariance;  recall that 
+$E[A Y] = A Y$ and $\text{Cov}(A Y,B Y) = A \text{Cov}(Y)B^T$
+
+2. Exercise 1.5.2 [Christensen](http://getitatduke.library.duke.edu/?sid=sersol&SS_jc=TC0000508493&title=Plane%20Answers%20to%20Complex%20Questions%3A%20The%20Theory%20of%20Linear%20Models)
+
+3.  We showed that $P_X = X(X^TX)^{-1}X^T$ was an orthogonal
+  projection on the column space of $X$ and that $\hat{Y} = P_X Y$.
+  While useful for theory, the projection matrix should never be used
+  in practice to find the MLE of $\boldsymbol{\mu}$ due to 1) computational
+  complexity (inverses and matrix multiplication) and instability.  To
+  find $\hat{\beta}$ for $X$ of full column rank  we solve
+  $X \beta = P_X Y$ which
+  leads to the _normal equations_  $(X^TX) \beta = X^TY$ and
+  solving the system of equations for $\beta$.
+  Instead consider the following for $X$ ($n \times p, p < n$) of rank $p$
+  
+      a.  Any $X$ may be written via a singular value decomposition as
+    $U \Lambda V^T$ where $U$ is a $n \times p$ orthonormal matrix
+    ($U^TU = I_p$ and columns of $U$ form an orthonormal basis (ONB) for
+    $C(X)$), $\Lambda$ is a $p \times p$ diagonal matrix and $V$ is
+    a $p \times p$ orthogonal matrix ($V^TV = V V^T = I_p$. Note
+    the difference between _orthonormal_ and _orthogonal_.
+    Show that $P_X$ may be expressed as a function of $U$ only and
+    provide an expression for $\hat{Y}$.  Similarly, find an
+    expression for $\hat{\beta}$ in terms of $U$, $\Lambda$ and $V$.
+    Your result should only require the inverse of a diagonal matrix!
+    
+      b. $X$ may be written in a (reduced or thinned) QR decomposition as a matrix
+  $Q$ that is a $n \times p$ orthonormal matrix (which forms an ONB
+  for $C(X)$) and $R$ which is a $p
+  \times p$ upper triangular matrix (i.e all elements below the
+  diagonal are 0) where $X = Q R$. The columns of $Q$ are an ONB for
+  the $C(X)$. Show that $P_X$
+  may be expressed as a function of $Q$ alone.   Show that  the 
+ the normal equations reduce to solving the triangular system $R \beta = Z$ where $Z = Q^T Y$.
+ Because $R$ is upper triangular, show that $\hat{\beta}$ may be
+ obtained be back-solving thus avoiding the matrix inverse of $X^TX$.
+   
+      c. Any symmetric matrix $A$ may be written via a Cholesky
+  decomposition as $A = L L^T$ where $L$
+  is lower triangular.   If $Z = X^TY$  show that we can solve two
+  triangular systems $L L^T \beta = Z$ by solving for $w$ using  $L w = Z$ using a
+  forward substitution and then for $\hat{\beta}$ using 
+  $L^T \beta = w$ avoiding any matrix inversion.  Write this out in psuedo-code.
+  
+   
+     
+     d. Prove that the two projection matrices obtained by the SVD and  the QR method are the same.  (review Theorems in Christensen Appencies about uniqueness of projections and cite appropriate results to show that they are the same.)
+     
+     e. Use `R` to find $Q$ and $U$ for the matrix in Example 1.0.2 in Christensen using the QR and SVD methods respectively. Does $Q$ equal $U$?   See help pages via `help(qr)` and  `help(svd)` for function documentation.  
+     (Try using Rmarkdown for writing up the solution!)
+    
+     f. Verify that the numerical solutions for the projections using $Q$ and $U$ are equal to the expression in problem 1.5.8 (b).
+
+    Note: The Cholesky method is the fastest in terms of $O(n p^2 + p^3 /3)$  floating point operations (flops), but is numerically unstable if the matrix is poorly conditioned.  R   uses the QR method ($O(2 n p^2 - 2p^3 /3)$ flops) in the function  `lm.fit()`(which is the workhorse underneath the `lm()` function.   The SVD method is the most expensive $O(2 n p^2 + 11 p^3)$ but can handle the rank deficient case. There are generalized Cholesky and QR methods for the rank deficient cases that involve pivoting the columns of X which avoids some of the instability.
+
+
+4. Suppose $\Sigma$ is a real $p \times p$ positive semi-definite
+  matrix.  Then the Cholesky decomposition of 
+  $\Sigma = L L^T$ where $L$ is a lower triangular matrix with
+  real, non-negative elements on the diagonal. 
+  Suppose you can generate standard normal random variates, $Z = (z_1,
+  \ldots, z_p)^T$ with $z_i \sim N(0,1)$ (iid).
+  
+    a) What is the distribution of $Y = \mu + L Z$ for $\mu \in \mathbb{R}^p$?  
+  
+    b) Explain why it does not matter for generating $Y$ that the Cholesky decomposition is not unique when $\Sigma$ is not positive definite.  Does it matter how we choose a _matrix square root_ $A$ of $\Sigma = A A^T$?  Explain. 
+  
+    c) Using `R`,  use the `chol` function to find the Cholesky factorization of $V$ in exercise 1.5.2.
+
+    d) Using the cholesky factorization, generate $5,000$ samples for the distribution of $Y$. _Given the factorization matrix multiplication `%*%` and `sweep`, you can do this without a loop in one line of code._
+
+    e) Using `R` create a histogram for the marginal distribution of $Y_1$ and overlay the actual density that you found in 1.5.2 (a).
+
+    f) Using the samples of $Y$, use matrix multiplication and `sweep` to generate samples of $Z$.  Compare the empirical estimates of means, variances, and covariances to the values you obtained in part (g) of 1.5.2.
+
+
+
+For the parts that involve `R` write up using knitr in Rstudio to generate a PDF.  Upload your R code and pdf to Sakai. The other parts may be written using knitr or by hand and scanned in. 
+
+Review Chapter 1 and Appendix A in  [Plane Answers to Complex Questions](http://getitatduke.library.duke.edu/?sid=sersol&SS_jc=TC0000508493&title=Plane%20Answers%20to%20Complex%20Questions%3A%20The%20Theory%20of%20Linear%20Models) on Vector Spaces 
+
+Review Material from the [StatSci Bootcamp](https://github.com/DukeStatSci/MathBootcamp2017/blob/master/Handouts/02_Matrices.pdf)
