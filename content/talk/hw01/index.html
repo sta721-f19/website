@@ -1,0 +1,81 @@
+---
+title: "Homework Assignment 1"
+abstract_short: 'Complete the following problems.  **Due 09/09/2019 11:00 PM** '
+date: '2019-08-28'
+draft: no
+math: yes
+selected: yes
+abstract: ''
+event: ""
+links:
+  - name: "Readings"
+    url: "http://getitatduke.library.duke.edu/?sid=sersol&SS_jc=TC0000508493&title=Plane%20Answers%20to%20Complex%20Questions%3A%20The%20Theory%20of%20Linear%20Models"
+url_slides: ''
+url_video: ''
+---
+
+
+
+<ol style="list-style-type: decimal">
+<li><p>Exercise 1.11 <a href="http://getitatduke.library.duke.edu/?sid=sersol&amp;SS_jc=TC0000508493&amp;title=Plane%20Answers%20to%20Complex%20Questions%3A%20The%20Theory%20of%20Linear%20Models">Christensen</a> (review notes on expectations and covariance; recall that
+<span class="math inline">\(E[A Y] = A Y\)</span> and <span class="math inline">\(\text{Cov}(A Y,B Y) = A \text{Cov}(Y)B^T\)</span></p></li>
+<li><p>Exercise 1.5.2 <a href="http://getitatduke.library.duke.edu/?sid=sersol&amp;SS_jc=TC0000508493&amp;title=Plane%20Answers%20to%20Complex%20Questions%3A%20The%20Theory%20of%20Linear%20Models">Christensen</a></p></li>
+<li><p>We showed that <span class="math inline">\(P_X = X(X^TX)^{-1}X^T\)</span> was an orthogonal
+projection on the column space of <span class="math inline">\(X\)</span> and that <span class="math inline">\(\hat{Y} = P_X Y\)</span>.
+While useful for theory, the projection matrix should never be used
+in practice to find the MLE of <span class="math inline">\(\boldsymbol{\mu}\)</span> due to 1) computational
+complexity (inverses and matrix multiplication) and instability. To
+find <span class="math inline">\(\hat{\beta}\)</span> for <span class="math inline">\(X\)</span> of full column rank we solve
+<span class="math inline">\(X \beta = P_X Y\)</span> which
+leads to the <em>normal equations</em> <span class="math inline">\((X^TX) \beta = X^TY\)</span> and
+solving the system of equations for <span class="math inline">\(\beta\)</span>.
+Instead consider the following for <span class="math inline">\(X\)</span> (<span class="math inline">\(n \times p, p &lt; n\)</span>) of rank <span class="math inline">\(p\)</span></p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Any <span class="math inline">\(X\)</span> may be written via a singular value decomposition as
+<span class="math inline">\(U \Lambda V^T\)</span> where <span class="math inline">\(U\)</span> is a <span class="math inline">\(n \times p\)</span> orthonormal matrix
+(<span class="math inline">\(U^TU = I_p\)</span> and columns of <span class="math inline">\(U\)</span> form an orthonormal basis (ONB) for
+<span class="math inline">\(C(X)\)</span>), <span class="math inline">\(\Lambda\)</span> is a <span class="math inline">\(p \times p\)</span> diagonal matrix and <span class="math inline">\(V\)</span> is
+a <span class="math inline">\(p \times p\)</span> orthogonal matrix (<span class="math inline">\(V^TV = V V^T = I_p\)</span>. Note
+the difference between <em>orthonormal</em> and <em>orthogonal</em>.
+Show that <span class="math inline">\(P_X\)</span> may be expressed as a function of <span class="math inline">\(U\)</span> only and
+provide an expression for <span class="math inline">\(\hat{Y}\)</span>. Similarly, find an
+expression for <span class="math inline">\(\hat{\beta}\)</span> in terms of <span class="math inline">\(U\)</span>, <span class="math inline">\(\Lambda\)</span> and <span class="math inline">\(V\)</span>.
+Your result should only require the inverse of a diagonal matrix!</p></li>
+<li><p><span class="math inline">\(X\)</span> may be written in a (reduced or thinned) QR decomposition as a matrix
+<span class="math inline">\(Q\)</span> that is a <span class="math inline">\(n \times p\)</span> orthonormal matrix (which forms an ONB
+for <span class="math inline">\(C(X)\)</span>) and <span class="math inline">\(R\)</span> which is a <span class="math inline">\(p  \times p\)</span> upper triangular matrix (i.e all elements below the
+diagonal are 0) where <span class="math inline">\(X = Q R\)</span>. The columns of <span class="math inline">\(Q\)</span> are an ONB for
+the <span class="math inline">\(C(X)\)</span>. Show that <span class="math inline">\(P_X\)</span>
+may be expressed as a function of <span class="math inline">\(Q\)</span> alone. Show that the
+the normal equations reduce to solving the triangular system <span class="math inline">\(R \beta = Z\)</span> where <span class="math inline">\(Z = Q^T Y\)</span>.
+Because <span class="math inline">\(R\)</span> is upper triangular, show that <span class="math inline">\(\hat{\beta}\)</span> may be
+obtained be back-solving thus avoiding the matrix inverse of <span class="math inline">\(X^TX\)</span>.</p></li>
+<li><p>Any symmetric matrix <span class="math inline">\(A\)</span> may be written via a Cholesky
+decomposition as <span class="math inline">\(A = L L^T\)</span> where <span class="math inline">\(L\)</span>
+is lower triangular. If <span class="math inline">\(Z = X^TY\)</span> show that we can solve two
+triangular systems <span class="math inline">\(L L^T \beta = Z\)</span> by solving for <span class="math inline">\(w\)</span> using <span class="math inline">\(L w = Z\)</span> using a
+forward substitution and then for <span class="math inline">\(\hat{\beta}\)</span> using
+<span class="math inline">\(L^T \beta = w\)</span> avoiding any matrix inversion. Write this out in psuedo-code.</p></li>
+<li><p>Prove that the two projection matrices obtained by the SVD and the QR method are the same. (review Theorems in Christensen Appencies about uniqueness of projections and cite appropriate results to show that they are the same.)</p></li>
+<li><p>Use <code>R</code> to find <span class="math inline">\(Q\)</span> and <span class="math inline">\(U\)</span> for the matrix in Example 1.0.2 in Christensen using the QR and SVD methods respectively. Does <span class="math inline">\(Q\)</span> equal <span class="math inline">\(U\)</span>? See help pages via <code>help(qr)</code> and <code>help(svd)</code> for function documentation.<br />
+(Use Sweave/knitr to write up the solution!)</p></li>
+<li><p>Verify that the numerical solutions for the projections using <span class="math inline">\(Q\)</span> and <span class="math inline">\(U\)</span> are equal to the expression in problem 1.5.8 (b).</p></li>
+</ol>
+<p>Note: The Cholesky method is the fastest in terms of <span class="math inline">\(O(n p^2 + p^3 /3)\)</span> floating point operations (flops), but is numerically unstable if the matrix is poorly conditioned. R uses the QR method (<span class="math inline">\(O(2 n p^2 - 2p^3 /3)\)</span> flops) in the function <code>lm.fit()</code>(which is the workhorse underneath the <code>lm()</code> function. The SVD method is the most expensive <span class="math inline">\(O(2 n p^2 + 11 p^3)\)</span> but can handle the rank deficient case. There are generalized Cholesky and QR methods for the rank deficient cases that involve pivoting the columns of X which avoids some of the instability.</p></li>
+<li><p>Suppose <span class="math inline">\(\Sigma\)</span> is a real <span class="math inline">\(p \times p\)</span> positive semi-definite
+matrix. Then the Cholesky decomposition of
+<span class="math inline">\(\Sigma = L L^T\)</span> where <span class="math inline">\(L\)</span> is a lower triangular matrix with
+real, non-negative elements on the diagonal.
+Suppose you can generate standard normal random variates, <span class="math inline">\(Z = (z_1,  \ldots, z_p)^T\)</span> with <span class="math inline">\(z_i \sim N(0,1)\)</span> (iid).</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>What is the distribution of <span class="math inline">\(Y = \mu + L Z\)</span> for <span class="math inline">\(\mu \in \mathbb{R}^p\)</span>?</p></li>
+<li><p>Explain why it does not matter for generating <span class="math inline">\(Y\)</span> that the Cholesky decomposition is not unique when <span class="math inline">\(\Sigma\)</span> is not positive definite. Does it matter how we choose a <em>matrix square root</em> <span class="math inline">\(A\)</span> of <span class="math inline">\(\Sigma = A A^T\)</span>? Explain.</p></li>
+<li><p>Using <code>R</code>, use the <code>chol</code> function to find the Cholesky factorization of <span class="math inline">\(V\)</span> in exercise 1.5.2.</p></li>
+<li><p>Using the cholesky factorization, generate <span class="math inline">\(5,000\)</span> samples for the distribution of <span class="math inline">\(Y\)</span>. <em>Given the factorization matrix multiplication <code>%*%</code> and <code>sweep</code>, you can do this without a loop in one line of code.</em></p></li>
+<li><p>Using <code>R</code> create a histogram for the marginal distribution of <span class="math inline">\(Y_1\)</span> and overlay the actual density that you found in 1.5.2 (a).</p></li>
+<li><p>Using the samples of <span class="math inline">\(Y\)</span>, use matrix multiplication and <code>sweep</code> to generate samples of <span class="math inline">\(Z\)</span>. Compare the empirical estimates of means, variances, and covariances to the values you obtained in part (g) of 1.5.2.</p></li>
+</ol></li>
+</ol>
+<p>For the parts that involve <code>R</code> write up using LaTeX and knitr with a Rnw file to generate a PDF. Upload your R code and pdf to Sakai. The other parts may be written using LaTeX/knitr or by hand and scanned in. [Suggestion see macro definitions from Lab1 or in Lectures for shortcuts for representing matrices.</p>
+<p>Review Chapter 1 and Appendix A in <a href="http://getitatduke.library.duke.edu/?sid=sersol&amp;SS_jc=TC0000508493&amp;title=Plane%20Answers%20to%20Complex%20Questions%3A%20The%20Theory%20of%20Linear%20Models">Plane Answers to Complex Questions</a> on Vector Spaces</p>
+<p>Review Material from the <a href="https://github.com/DukeStatSci/MathBootcamp2017/blob/master/Handouts/02_Matrices.pdf">StatSci Bootcamp</a></p>
