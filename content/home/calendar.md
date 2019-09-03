@@ -21,6 +21,7 @@ weight = 50
 |    | 08-30-2019 | [Lab 1: Intro to Weaving Latex and R](https://github.com/sta721-f19/lab1]
 | 2  | 09-02-2019 | [Projections & Expectations ](publication/projections/) |  [HW1](talk/hw01/) |
 |    | 09-04-2019 | [Normal Theory](publication/normal-theory/) |   |
+|    | 09-06-2019 | [Lab 2: Introduction to GitHub and Rstudio] |   |
 | 3  | 09-09-2019 | [Sampling Distributions](publication/samplingdist/) | [HW2](talk/hw02)  |
 |    | 09-11-2019 | [Prediction](publication/prediction/) |   |
 | 4  | 09-16-2019 | [Gauss-Markov and Prediction](publication/gauss-markov/) | [HW3](talk/hw03) |  
