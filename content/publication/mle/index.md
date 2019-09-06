@@ -1,6 +1,6 @@
 ---
 draft: false
-featured: true
+featured: false
 abstract: "Maximum likelihood estimation in linear models via projections."
 abstract_short: "Maximum likelihood estimation in linear models via projections.  Click on Details for additional information and supporting material"
 authors: ["Merlise Clyde"]

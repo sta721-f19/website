@@ -1,5 +1,5 @@
-%\documentclass{beamer}
-\documentclass[handout]{beamer}
+\documentclass{beamer}
+%\documentclass[handout]{beamer}
 %\usepackage[dvips]{color}
 \usepackage{graphicx, hyperref}
 \usepackage{amsmath,amssymb,array,comment,eucal}
@@ -161,19 +161,20 @@ Proof:  need momemt generating or characteristic functions which uniquely charac
 \begin{frame}{Moment Generating Functions and Characteristics Functions}
 
 
-Univariate $Y \sim \N(\mu, \sigma^2)$
+Univariate $Y \sim \N(\mu, \sigma^2)$  \pause
 \begin{itemize}
   \item MGF or Laplace Transform
   $$m_{Y}(t) = \E[e^{t^TY}]   = \int e^{t^Ty} f(y)  dy
 = e^{t^T\mu + \frac{1}{2} t^2 \sigma^2 }
   $$
-
+ \pause
   \item Characteristic function or Fourier transform
-  $$\varphi_{Y}(t) = \E[e^{-i t^TY}]
-  = \int e^{ -i t^Ty} f(y)  dy
-= e^{-i t^T\mu  - \frac{1}{2} t^2 \sigma^2 }
+  $$\varphi_{Y}(t) = \E[e^{i t^TY}]
+  = \int e^{ i t^Ty} f(y)  dy
+= e^{i t^T\mu  - \frac{1}{2} t^2 \sigma^2 }
   $$
 \end{itemize}
+ \pause
 
 To show that $\Y = \mub + \A \Z$ has a $\N(\mub, \Sigmab)$ distribution, we need to show that
 $\v^T\Y$ has a MGF or Characteristic function of a univariate normal with mean $\v^T\mub$ and variance $\v^T\Sigma^b\v$.
@@ -181,16 +182,17 @@ $\v^T\Y$ has a MGF or Characteristic function of a univariate normal with mean $
 
 \begin{frame}{Proof}
 \begin{align*}
-\E[e^{-i t\v^T\Y}] & =\E[e^{-i t \v^T(\mub + \A \Z)}] \\
-                & = e^{-i t \v^T{\mub}} \E[e^{-it \v^T\A \Z}]  \\
-                & =  e^{-i t \v^T{\mub}} \E[e^{-it \u^T \Z}] \text{ for } \u = \A^T\v \in \bbR^n \\
-                & =  e^{-i t \v^T{\mub}} \prod_{j = i}^n\E[e^{-it u_j Z_j}] \\
-                 & =  e^{-i t \v^T{\mub}} \prod \varphi(t u_j) \\
-                   & =  e^{-i t \v^T{\mub}} \prod e^{- \frac 1 2 t^2 u_j^2} \\
-                   & e^{-i t \v^T \mub   - \frac 1 2 \sum_j t^2 u_j^2} \\
-                   & e^{-i t \v^T \mub - \frac 1 2 t^2 \u^T\u}  \text{ note: } \u^T\u = \v^T\A\A^T\v = \v^T\Sigmab \v \\
-                   &  e^{-i t \v^T \mub - \frac 1 2 t^2 \v^T\Sigmab \v }
+\E[e^{i t\v^T\Y}] & =\E[e^{i t \v^T(\mub + \A \Z)}]  \\
+                & = e^{i t \v^T{\mub}} \E[e^{it \v^T\A \Z}]  \\
+                & =  e^{i t \v^T{\mub}} \E[e^{it \u^T \Z}] \text{ for } \u = \A^T\v \in \bbR^n  \\
+                & =  e^{i t \v^T{\mub}} \prod_{j = i}^n\E[e^{it u_j Z_j}]  \\
+                 & =  e^{i t \v^T{\mub}} \prod \varphi(t u_j)   \\
+                   & =  e^{i t \v^T{\mub}} \prod e^{- \frac 1 2 t^2 u_j^2}  \\
+                   & e^{i t \v^T \mub   - \frac 1 2 \sum_j t^2 u_j^2}   \\
+                   & e^{i t \v^T \mub - \frac 1 2 t^2 \u^T\u}  \text{ note: } \u^T\u = \v^T\A\A^T\v = \v^T\Sigmab \v \\
+                   &  e^{i t \v^T \mub - \frac 1 2 t^2 \v^T\Sigmab \v }
 \end{align*}
+ \pause
 Let $\t = t \v$ then $\varphi(t \v^T \Y) = \varphi(\t^T \Y)$ yields multivariate normal mgf or characteristic function.
 \end{frame}
 
@@ -205,10 +207,10 @@ $\Y \sim \N(\mub, \Sigmab)$
 = e^{\t^T\mub + \frac{1}{2} \t^T \Sigmab \t}
   $$
 
-  \item Characteristic function or Fourier Transform
-  $$\phi_{\Y}(\t) = \E[e^{-i \t^T\Y}]
-  = \int e^{ -i \t^T\y} f(\y)  d\y
-= e^{-i \t^T\mub  - \frac{1}{2} \t^T \Sigmab \t}
+  \item Characteristic function (or Fourier Transform)
+  $$\phi_{\Y}(\t) = \E[e^{i \t^T\Y}]
+  = \int e^{ i \t^T\y} f(\y)  d\y
+= e^{i \t^T\mub  - \frac{1}{2} \t^T \Sigmab \t}
   $$
 \end{itemize}
 \end{frame}
