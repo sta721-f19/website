@@ -18,7 +18,7 @@ weight = 50
 |:--:|:-------------:|:---------------------------|:---|
 | 1  | 08-26-2019 | [Introduction](publication/intro/) |    |
 |    | 08-28-2019 | [MLE](publication/mle/) | |
-|    | 08-30-2019 | [Lab 1: Intro to Weaving Latex and R](https://github.com/sta721-f19/lab1]
+|    | 08-30-2019 | [Lab 1: Intro to Weaving Latex and R](https://github.com/sta721-f19/lab1)
 | 2  | 09-02-2019 | [Projections & Expectations ](publication/projections/) |  [HW1](talk/hw01/) |
 |    | 09-04-2019 | [Normal Theory](publication/normal-theory/) |   |
 |    | 09-06-2019 | Lab 2: Introduction to GitHub and Rstudio |  See invitation sent from Sakai |
