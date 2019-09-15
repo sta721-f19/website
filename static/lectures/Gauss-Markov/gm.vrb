@@ -1,0 +1,22 @@
+\frametitle{Example}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hlstd{(}\hlstr{"estimability"} \hlstd{)}
+\hlkwd{cbind}\hlstd{(}\hlkwd{epredict}\hlstd{(lm1234, test.set),} \hlkwd{epredict}\hlstd{(lm3412, test.set))}
+\end{alltt}
+\begin{verbatim}
+##   [,1] [,2]
+## 1   14   14
+## 2   NA   NA
+## 3   23   23
+## 4    5    5
+## 5   NA   NA
+## 6   NA   NA
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+Rows 2, 5, and 6 are not estimable!  No linear unbiased estimator
+
+

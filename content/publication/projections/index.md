@@ -1,10 +1,10 @@
 ---
 draft: false
-fratured: false
+featured: false
 abstract: "In this lecture we exam the geometric properties of OLS and the role of projections. In particular we will find expectations of OLS estimates and quadratic forms, and derive an unbiased estimate of the variance using properties of the projection matrix"
 abstract_short: "In this lecture we will study the distribution of OLS/MLEs and the role of projections."
 authors:
-date: "2019-09-02"
+date: "2019-09-03"
 image_preview: ""
 math: true
 publication_types: []

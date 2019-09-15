@@ -1,0 +1,66 @@
+---
+title: "Estimability"
+output: html_notebook
+---
+
+## Create data
+
+```{r data}
+x1 = -4:4
+x2 = c(-2, 1, -1, 2, 0, 2, -1, 1, -2)
+x3 = 3*x1  -2*x2
+x4 = x2 - x1 + 4
+
+Y = 1 + x1 + x2 + x3 + x4 + c(-.5, .5, .5, -.5, 0, .5, -.5, -.5, .5)
+
+dev.set = data.frame(Y, x1, x2, x3, x4)
+```
+
+## Fit linear model and extract coefficients.
+```{r lm1}
+lm1234 = lm(Y ~ x1 + x2 + x3 + x4, data=dev.set)
+coefficients(lm1234)
+```
+
+Note the NA's corresponding to coefficients that are not estimable.
+
+Now refit the model with predictors in a different order (name reflects order in design matrix
+
+```{r lm2}
+lm3412 = lm(Y ~ x3 + x4 + x1 + x2, data=dev.set)
+coefficients(lm3412)
+```
+
+## Predictions
+Look at data and predictions from the two model fits.
+```{r}
+cbind(dev.set, predict(lm1234), predict(lm3412))
+```
+
+Perfect agreement, confirming that the mean's are estimable even if individual parameters are not.
+
+Out of sample prediction with a new dataframe `test.set`
+
+```{r} 
+test.set = data.frame(
+    x1 = c(3, 6, 6, 0, 0, 1),
+    x2 = c(1, 2, 2, 0, 0, 2),
+    x3 = c(7,14, 14,0, 0, 3),
+    x4 = c(2, 4, 0, 4, 0, 4))
+
+out = cbind(test.set,
+    predict(lm1234, new=test.set),
+    predict(lm3412, new=test.set))
+out
+```
+
+Note the NA's.  Can we determine the points that would not be estimable ahead of the time?
+
+##  Estimability
+
+
+Use function `epredict` from the library `estimability`
+```{r}
+library("estimability" )
+cbind(epredict(lm1234, test.set), epredict(lm3412, test.set))
+```
