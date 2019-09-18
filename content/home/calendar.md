@@ -26,11 +26,12 @@ weight = 50
 |    | 09-11-2019 | [Prediction](publication/prediction/) |   |
 |    | 09-13-2019 | Lab 3:  | |
 | 4  | 09-16-2019 | [Gauss-Markov and Prediction](publication/gauss-markov/) | [HW3](talk/hw03) |  
-|    | 09-18-2019 | [Transformations & Normality](publication/boxcox) | [Data Analysis]|
-| 5  | 09-23-2019 | [Bayes Estimation in Linear Models](publication/bayes-intro) |  [HW4](talk/hw04)  |
-|    | 09-25-2019 | [Conjugate Priors in Linear Models](publication/conjugate-priors) |  |
-| 6  | 09-30-2019 | Non-informative Priors | |
-|    | 10-02-2019 |  [G-Priors and Prior Choices](publication/gpriors-and-mixtures) | |
+|    | 09-18-2019 | [Bayes Estimation in Linear Models](publication/bayes-intro/) | |
+|    | 09-20-2019 | Lab 4: Writing functions, coding style, and Q&A | |
+| 5  | 09-23-2019 | [Conjugate Priors in Linear Models](publication/conjugate-priors/) |  [HW4](talk/hw04)  |
+|    | 09-25-2019 | Non-informative Priors |  |
+| 6  | 09-30-2019 | [G-Priors and Prior Choices](publication/gpriors-and-mixtures/) | |
+|    | 10-02-2019 |   | |
 |    | 10-04-2019 | Midterm | |
 | 7  | 10-07-2019 | Fall Break | |
 |    | 10-09-2019 | [Mixtures & MCMC](publication/estimation) | [HW5](talk/hw05) |
@@ -46,6 +47,7 @@ weight = 50
 |    | 11-13-2019 | [MCMC in BMA/BVS and inference](publication/mcmc)       |  |
 | 13 | 11-18-2019 | [Factors and Hierarchical Models](publication/robust) | | 
 |    | 11-20-2019 | [Residuals and Checking](publication/residuals) | [TH](project/data-analysis) |
+|    |            |  [Transformations & Normality](publication/boxcox) | |
 | 14 | 11-25-2019 | [Robustness](publication/robust) | |
 |    | 11-27-2019 | Thanksgiving Break | |
 | 15 | 12-02-2019 | Graduate Reading Period | |
