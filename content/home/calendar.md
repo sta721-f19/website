@@ -28,8 +28,8 @@ weight = 50
 | 4  | 09-16-2019 | [Gauss-Markov and Prediction](publication/gauss-markov/) | [HW3](talk/hw03/) |  
 |    | 09-18-2019 | [Bayes Estimation in Linear Models](publication/bayes-intro/) | |
 |    | 09-20-2019 | Lab 4: Writing functions, coding style, and Q&A | |
-| 5  | 09-23-2019 | [Conjugate Priors in Linear Models](publication/conjugate-priors/) |  [HW4](talk/hw04/)  |
-|    | 09-25-2019 | Non-informative Priors |  |
+| 5  | 09-23-2019 | [Conjugate Priors in Linear Models] |  [HW4](talk/hw04/)  |
+|    | 09-25-2019 | [Non-informative Priors](publication/jeffreys/) |  |
 |    | 09-27-2019 | Lab 5:  Q&A |
 | 6  | 09-30-2019 | [G-Priors and Prior Choices](publication/gpriors-and-mixtures/) | |
 |    | 10-02-2019 |   | |
