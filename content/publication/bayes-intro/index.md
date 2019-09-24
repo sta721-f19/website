@@ -1,6 +1,6 @@
 ---
 draft: false
-featured: true
+featured: false
 abstract: "In this lecture we will introduce Bayesian estimation for linear models using the Normal-Gamma conjugate prior."
 abstract_short: "In this lecture we will introduce Bayesian estimation for linear models using the Normal-Gamma conjugate prior."
 authors:
