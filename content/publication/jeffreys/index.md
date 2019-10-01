@@ -1,18 +1,18 @@
 ---
 draft: false
 featured: false
-abstract: "In this lecture we will go into more details about the Normal-Gamma conjugate prior and limiting cases in linear models."
-abstract_short: "In this lecture we will go into more details about the Normal-Gamma conjugate prior and limiting cases in linear models."
+abstract: "In this lecture we will go into more details about the Normal-Gamma conjugate prior and limiting cases in linear models, including Jeffreys prior."
+abstract_short: "In this lecture we will go into more details about the Normal-Gamma conjugate prior and limiting cases in linear models,  including Jeffreys prior."
 authors:
-date: "2019-09-22"
+date: "2019-09-24"
 image_preview: ""
 math: true
 publication_types: []
 publication: ""
 publication_short: ""
-title: "Choice of Conjugate Prior Distributions"
-url_source: "lectures/ConjugatePriors/priors.tex"
-url_slides: "lectures/ConjugatePriors/priors.pdf"
+title: "Non-Informative Priors and Default Priors"
+url_source: "lectures/Jeffreys/jeffreys.Rnw"
+url_slides: "lectures/Jeffreys/jeffreys.pdf"
 url_code: ""
 url_dataset: ""
 links: 

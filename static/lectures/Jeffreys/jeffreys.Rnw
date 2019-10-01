@@ -1,0 +1,264 @@
+%\documentclass[]{beamer}
+\documentclass[handout]{beamer}
+%\usepackage[dvips]{color}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,array,eucal}
+\input{../macros}
+\usepackage{verbatim}
+
+\usetheme{default}
+\title{Non-Informative Priors}
+\institute{Merlise Clyde}
+\author{STA721 Linear Models Duke University}
+\date{\today}
+%\logo{duke.eps}
+
+\begin{document}
+<<echo=FALSE,messages=FALSE>>=
+suppressMessages(library(R2jags))
+@
+
+\maketitle
+
+\begin{frame}
+  \frametitle{Bayesian Estimation}
+  Model
+$$
+\Y \sim \N(\X \b, \I_n/\phi)
+$$
+with precision $\phi = 1/\sigma^2$.
+\pause
+
+\vfill
+Difficulty with specifying hyperparameters in the Normal-Gamma prior in practice
+
+Alternatives:
+\begin{itemize}
+\item Non-Informative Priors: Jeffreys' Priors
+\item g-prior  $\N(0, \frac{g}{\phi}(\X^T\X)^{-1})$
+\item Partitioned g-priors
+\item Zellner-Siow Cauchy Prior, mixtures and MCMC
+\end{itemize}
+
+Readings: Hoff Chapter 9
+\end{frame}
+
+\begin{frame}\frametitle{Non-Informative}
+
+What does it mean to be non-informative about $\b$ or about $\phi$? \pause
+
+Uniform distribution?  \pause
+
+\begin{itemize}
+  \item Does it matter if we are non-informative about $\b$ versus $\mub$ \pause
+  \item Non-informative about $\phi$? \pause
+  \item Non-informative about $\sigma^2$? \pause
+  \item Non-informative about $\sigma$? \pause
+\end{itemize}
+
+These parameter spaces are unbounded so a uniform measure is not integrable on $\bbR^p$ or $\bbR^+$.  Can these be justified?
+
+\end{frame}
+
+\begin{frame} \frametitle{Potential Problem with Uniform Measure}
+
+Take $p(\phi) \propto 1 d\phi$.   What is $p(\sigma^2)$ ? \pause
+
+$$\phi = 1/\sigma^2$$  \pause
+
+$$d \phi = [1/\sigma^2]^2 d\sigma^2$$  \pause
+
+$$p(\sigma^2) = [1/\sigma^2]^2 d\sigma^2$$  \pause
+
+Not uniform.
+\end{frame}
+\begin{frame}
+  \frametitle{Jeffreys Prior}
+
+Jeffreys proposed a default  procedure so that resulting prior
+would be invariant to model parameterization  \pause
+
+$$p(\tb) \propto |\cI(\tb)|^{1/2}$$
+
+where $\cI(\tb)$ is the  Expected Fisher Information matrix
+\pause
+$$
+\cI(\theta) = - \E[ \left[ \frac{\partial^2 \log(\cL(\tb))}{\partial
+  \theta_i \partial \theta_j} \right] ]
+$$
+\end{frame}
+\begin{frame}
+  \frametitle{Fisher Information Matrix}
+Log Likelihood
+$$
+    \log(\cL(\b, \phi))  =  \, \frac{n}{2} \log(\phi)  - \frac{\phi}{2}
+     \| (\I - \P_\x) \Y\|^2
+ - \frac{\phi}{2}(\b - \bhat)^T(\X^T\X)(\b - \bhat)
+$$ \pause
+  \begin{eqnarray*}
+\frac{\partial^2 \log \cL} { \partial \tb \partial \tb^T} & = &
+\left[
+  \begin{array}{cc}
+    -\phi (\X^T\X) & -(\X^T\X) (\b - \bhat) \\
+  - (\b - \bhat)^T (\X^T\X) & -\frac{n}{2} \frac{1}{\phi^2} \\
+  \end{array}
+\right] \pause \\
+\E[\frac{\partial^2 \log \cL} { \partial \tb \partial \tb^T}] & = &
+\left[
+  \begin{array}{cc}
+    -\phi (\X^T\X) & \zero_p \\
+  \zero_p^T & -\frac{n}{2} \frac{1}{\phi^2} \\
+  \end{array}
+\right] \pause \\
+& & \\
+\cI((\b, \phi)^T) & = & \left[
+  \begin{array}{cc}
+    \phi (\X^T\X) & \zero_p \\
+  \zero_p^T & \frac{n}{2} \frac{1}{\phi^2}
+  \end{array}
+\right]
+  \end{eqnarray*}
+\end{frame}
+\begin{frame}
+  \frametitle{Jeffreys Prior}
+  Jeffreys Prior
+  \begin{eqnarray*}
+  p_J(\b, \phi)  & \propto & |\cI((\b, \phi)^T) |^{1/2}   \pause \\
+               & = & |\phi \X^T\X|^{1/2} \left(\frac{n}{2}
+                 \frac{1}{\phi^2} \right)^{1/2} \pause \\
+  & \propto  &  \phi^{p/2 - 1} |\X^T\X|^{1/2} \pause \\
+  & \propto & \phi^{p/2 - 1}  \pause
+  \end{eqnarray*}
+  Improper prior   $\iint p_J(\b, \phi) \, d\b \, d\phi $ not finite
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Formal Bayes Posterior}
+$$  p(\b, \phi \mid \Y) \propto p(\Y \mid \b, \phi)  \phi^{p/2 - 1} $$
+\pause
+if this is integrable, then renormalize to obtain formal posterior
+distribution \pause
+
+
+\begin{eqnarray*}
+  \b \mid \phi, \Y & \sim & \N(\bhat, (\X^T\X)^{-1} \phi^{-1}) \\
+  \phi \mid \Y & \sim& \G(n/2, \| \Y - \X\bhat \|^2/2)
+\end{eqnarray*} \pause
+Limiting case of Conjugate prior with $\bv_0 = 0$, $\Phi = \zero$,
+$\nu_0 = 0$ and $\SS_0 = 0$ \pause
+
+Posterior does not depend on dimension $p$;   \pause
+
+\vfill
+Jeffreys did not recommend using this
+\end{frame}
+\begin{frame}
+  \frametitle{Independent Jeffreys Prior}
+  \begin{itemize}
+  \item  Treat $\b$ and $\phi$ separately  (``orthogonal
+    parameterization'') \pause
+  \item $p_{IJ}(\b) \propto |\cI(\b)|^{1/2}$ \pause
+\item $p_{IJ}(\phi) \propto |\cI(\phi)\|^{1/2}$ \pause
+  \end{itemize}
+$$
+\cI((\b, \phi)^T)  =  \left[
+  \begin{array}{cc}
+    \phi (\X^T\X) & \zero_p \\
+  \zero_p^T & \frac{n}{2} \frac{1}{\phi^2}
+  \end{array}
+\right]
+$$
+\pause
+$$p_{IJ}(\b) \propto |\phi \X^T\X|^{1/2} \propto 1$$ \pause
+$$p_{IJ}(\phi) \propto \phi^{-1}$$ \pause
+
+Independent Jeffreys Prior is
+$$p_{IJ}(\beta, \phi) \propto p_{IJ}(\b) p_{IJ}(\phi) = \phi^{-1}$$
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Formal Posterior Distribution}
+  With Independent Jeffreys Prior
+$$p_{IJ}(\beta, \phi) \propto p_{IJ}(\b) p_{IJ}(\phi) =  \phi^{-1}$$
+\pause
+Formal Posterior Distribution
+\pause
+\begin{eqnarray*}
+  \b \mid \phi, \Y & \sim & \N(\bhat, (\X^T\X)^{-1} \phi^{-1}) \pause \\
+  \phi \mid \Y & \sim& \G((n-p)/2, \| \Y - \X\bhat \|^2/2) \pause\\
+\b \mid \Y & \sim & t_{n-p}(\bhat, \shat (\X^T\X)^{-1})\pause
+\end{eqnarray*}
+Bayesian Credible Sets
+$p(\b \in C_\alpha) = 1- \alpha$ correspond to frequentist Confidence
+Regions
+
+$$\frac{\lambdab^T\b - \lambdab\bhat}
+{\sqrt{\shat \lambdab^T(\X^T\X)^{-1} \lambdab}} \sim t_{n-p}$$ \pause
+
+Cannot represent anyone's prior beliefs, but used as a reference posterior
+\end{frame}
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+\begin{frame}
+  \frametitle{How Good are these Estimators?}
+Quadratic loss for estimating  $\b$ using estimator $\a$
+$$ L(\b, \a) =  ( \b - \a)^T(\b -\a)$$ \pause
+
+\begin{itemize}
+\item Consider our expected loss (before we see the data) of taking an
+``action'' $\a$ \pause
+\item Under OLS or the  Reference prior the Expected Mean Square Error  \pause
+  \begin{eqnarray*}
+\E_\Y[( \b - \bhat)^T(\b -\bhat) & = &\sigma^2
+  \tr[(\X^T\X)^{-1}] \pause \\
+ & = & \sigma^2 \sum_{j=1}^p \lambda_j^{-1}
+  \end{eqnarray*}
+where $\lambda_j$ are eigenvalues of $\X^T\X$.
+\pause
+\item If smallest $\lambda_j \to 0$ then MSE  $\to \infty$
+\item Note: estimate is unbiased!
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Is the $g$-prior better?}
+
+Explore Frequentist properties of using a Bayesian estimator
+
+$$\E_\Y[( \b - \bhat_g)^T(\b -\bhat_g)$$
+
+but now $\bhat_g = g/(1+g) \bhat$
+\end{frame}
+
+\begin{frame}\frametitle{Estimator Properties}
+
+  \begin{itemize}
+  \item  Bias  \pause
+  \item  Variability \pause
+  \item MSE = Bias$^2$ + Variance  (multivariate analogs) \pause
+\item Problems with OLS \& g-priors with collinearity \pause
+\item Solutions: \pause
+  \begin{itemize}
+  \item removal of terms \pause
+   \item other shrinkage estimators
+  \end{itemize}
+
+  \end{itemize}
+\end{frame}
+
+
+
+\end{document}

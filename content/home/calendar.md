@@ -31,11 +31,11 @@ weight = 50
 | 5  | 09-23-2019 | [Conjugate Priors in Linear Models] |  [HW4](talk/hw04/)  |
 |    | 09-25-2019 | [Non-informative Priors](publication/jeffreys/) |  |
 |    | 09-27-2019 | Lab 5:  Q&A |
-| 6  | 09-30-2019 | [G-Priors and Prior Choices](publication/gpriors-and-mixtures/) | |
-|    | 10-02-2019 |   | |
+| 6  | 09-30-2019 | [G-Priors and Prior Choices](publication/g-priors/) | |
+|    | 10-02-2019 | [Cauchy Priors: Mixtures & MCMC](publication/cauchy-priors/)  | |
 |    | 10-04-2019 | Midterm | |
 | 7  | 10-07-2019 | Fall Break | |
-|    | 10-09-2019 | [Mixtures & MCMC](publication/estimation) | [HW5](talk/hw05) |
+|    | 10-09-2019 | [Bayes Estimation](publication/estimation) | [HW5](talk/hw05) |
 | 8  | 10-14-2019 | [Ridge Regression](publication/ridge) | |
 |    | 10-16-2019 | [Bayesian Ridge Regression](publication/bayesridge) | [HW6](talk/hw06)|
 | 9  | 10-21-2019 | [Lasso and Bayesian Lasso Regression](publication/lasso) | |

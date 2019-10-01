@@ -1,0 +1,360 @@
+\documentclass[]{beamer}
+%\documentclass[handout]{beamer}
+%\usepackage[dvips]{color}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,array,eucal}
+\input{../macros}
+\usepackage{verbatim}
+
+\usetheme{default}
+\title{G-Priors and Mixture Distributions}
+\institute{Merlise Clyde}
+\author{STA721 Linear Models Duke University}
+\date{\today}
+%\logo{duke.eps}
+
+\begin{document}
+<<echo=FALSE,messages=FALSE>>=
+suppressMessages(library(R2jags))
+@
+
+\maketitle
+
+\begin{frame}
+  \frametitle{Bayesian Estimation}
+  Model
+$$
+\Y \sim \N(\X \b, \I_n/\phi)
+$$
+with precision $\phi = 1/\sigma^2$.
+\pause
+
+\vfill
+Default Prior Choices for $\b$ and $\phi$:
+\begin{itemize}
+\item ``Non-Informative Priors'': Independent Jeffreys' Priors (improper)
+\item g-prior  $\N(0, \frac{g}{\phi}(\X^T\X)^{-1})$
+\item Partitioned g-priors
+\item Zellner-Siow Cauchy Prior, mixtures and MCMC (if time)
+\end{itemize}
+
+Readings: Hoff Chapter 9
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Zellner's $g$-prior}
+Zellner's g-prior(s) $\b \mid \phi \sim \N(\bv_0, g
+    (\X^T\X)^{-1}/\phi)$ \pause
+
+$$\b \mid \Y, \phi \sim \N\left( \frac{g}{1 + g} \bhat +  \frac{1}{1 + g}
+\bv_0, \frac{g}{1 + g} (\X^T\X)^{-1} \phi^{-1} \right)$$ \pause
+
+
+
+\vspace{1in}
+ Invariance: Require posterior of   $\X \b$  equal the posterior of $\X \H \alphav$
+\pause   ($\a_0 = \H^{-1} \bv_0$)
+
+
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Shrinkage}
+ Posterior mean under  $g$-prior  with $\bv_0 = 0$
+$\frac{g}{1 +g} \bhat $
+
+\centerline{\includegraphics[height=3in]{shrinkage}}
+\end{frame}
+
+
+\begin{frame} \frametitle{Choice of $g$}
+\begin{itemize}
+  \item $\frac{g}{1 + g}$  weight given to the data \pause
+  \item Fixed $g$ effect does not vanish as $n \to \infty$  (asymptotic bias) \pause
+  \item Use $g = n$ or place a prior distribution on $g$
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+ \frametitle{Partitioned Zellner's $g$-prior }
+
+Zellner recognized that some parameters might have less information
+
+$$ \Y = \X_0 \b_0 + \X_1 \b_1 + \eps$$
+
+\begin{itemize}
+\item $\X_0^T \X_1 = \zero$ (orthogonal columns) \pause
+\item Fisher information block diagonal \pause
+\item $\b_0 \sim N( \bv_0,  g_0 (\X_0^T\X_0)^{-1}/\phi)$ \pause
+\item $\b_1 \sim N( \bv_1,  g_1 (\X_1^T\X_1)^{-1}/\phi)$ \pause
+\item $p(\phi) \propto 1/\phi$
+\end{itemize}
+Special case $\X_0 = \one_n$ and let $g_0 \to \infty$
+$$p(\beta_0, \phi) \propto 1/\phi$$
+\end{frame}
+
+\begin{frame}[t]
+  \frametitle{Bayesian Estimation with $g$ prior}
+
+\begin{eqnarray*}
+\Y & = & \one \alpha_0 + \X_1 \b + \eps \\
+p(\alpha_0, \phi) & \propto & 1 \\
+\b \mid \phi & \sim & \N(\zero, \frac{g}{\phi} (\X^T (\I_n - \P_{\one}) \X)^{-1})
+\end{eqnarray*}\pause
+
+Equivalent to
+\begin{eqnarray*}
+\Y & = & \one \beta_0 + \I_n - \P_1) \X_1 \b + \eps \\
+\beta_0 & = & \alpha + \bar{\x}^T \b \\
+p(\beta_0, \phi) & \propto & 1 \\
+\b \mid \phi & \sim & \N(\zero, \frac{g}{\phi} (\X^T (\I_n - \P_{\one}) \X)^{-1})
+\end{eqnarray*}
+\end{frame}
+
+\begin{frame}\frametitle{Prior Data}
+Note $$(\X^T (\I_n - \P_{\one}) \X) = (\X^T (\I_n - \P_{\one})^T (\I_n
+- \P_{\one}) \X)  = (\X -\one_n \Xbar^T)^T (\X - \one_n \Xbar) $$
+\pause
+Let  $(\X -\one_n \Xbar^T)^T (\X - \one \Xbar) = \SS_{\X} = \U^T \U$
+\pause
+
+Quadratic contribution to the log likelihood from prior after integrating out $\beta_0$
+
+$$ ( \Y_c  - \X_c \b)^T(\Y_c - \X_c\b) + ( \b^T\frac{\U^T \U}{g} \b)   $$
+\pause
+$$ ( \Y_c  - \X_c \b)^T(\Y_c - \X_c\b) + ( \zero_p -
+\frac{\U}{\sqrt{g}}\b)^T(\zero_p -  \frac{\U}{\sqrt{g}} \b)   $$
+
+Prior observations  with $Yc =  0$.
+\end{frame}
+
+
+\begin{frame}\frametitle{Example: g=5, n=30}
+
+In SLR it is like an extra $Y_0 = 0$ at $\X_o = \sqrt{\frac{\SS_x}{g}}$:
+$$ ( \Y_c  - \X_c \b)^T(\Y_c - \X_c\b) + (0 - \sqrt{\frac{\SS_x}{g}}\b)^T (0 - \sqrt{\frac{\SS_X}{g}} \b)   $$
+\pause
+<<simdata, echo=F, out.height='2.5in', out.width='3.5in'>>=
+set.seed(8675309)
+ X = rnorm(30, 0, 1)
+ Xc = X - mean(X)
+ Y = Xc* 3 + rnorm(30, 0, 1)
+ Yc = Y - mean(Y)
+ ols = lm(Yc ~ Xc -1)
+ SSX = sum(Xc^2)
+ g = 5
+
+ Xo = sqrt(SSX/g)
+ Xcomp = c(Xc, Xo)
+ Ycomp = c(Yc, 0)
+ bols = lm(Ycomp ~ Xcomp -1)
+
+plot(Xcomp, Ycomp)
+points(sqrt(SSX/g), 0, pch=15, col=2)
+
+abline(0, ols$coef)
+abline(0, bols$coef, lty=3, lwd=3, col=2)
+
+legend(1, -2, legend=c("OLS", "g-prior"), lty=c(1, 3), col=c(1,2))
+@
+
+
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{Disadvantages of Conjugate Priors}
+  Disadvantages: \pause
+\begin{itemize}
+\item Results  may have be sensitive to prior ``outliers'' due to
+  linear updating \pause
+\item Problem potentially with all Normal priors, not just the
+  $g$-prior. \pause
+\item Cannot capture all possible prior beliefs \pause
+\item Mixtures of Conjugate Priors
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Mixtures of Conjugate Priors}
+  \begin{theorem}[Diaconis \& Ylivisaker 1985]  Given a sampling model
+  $p(y \mid \tb)$ from an exponential family, any prior distribution
+  can be expressed as a mixture of conjugate prior distributions
+ \end{theorem}
+
+ \begin{itemize}
+ \item Prior $p(\tb) = \int p(\tb \mid \omega) p(\omega)\, d \omega$ \pause
+ \item Posterior \pause
+   \begin{eqnarray*}
+   p(\tb \mid \Y)  &\propto & \int p(\Y \mid \tb) p(\tb\mid \omega)
+   p(\omega) \, d\omega \pause \\
+ & \propto & \int  \frac{  p(\Y \mid \tb) p(\tb \mid \omega) } {p(\Y \mid
+   \omega)}  p(\Y \mid
+ \omega) p(\omega ) \, d \omega  \pause \\
+& \propto & \int p(\tb \mid \Y, \omega)  p(\Y \mid
+ \omega) p(\omega ) \, d \omega \pause \\
+ p(\tb \mid \Y) & =  & \frac{\int p(\tb \mid \Y, \omega)  p(\Y \mid
+ \omega) p(\omega ) \, d \omega }
+{\int p(\Y \mid
+ \omega) p(\omega ) \, d \omega }
+       \end{eqnarray*}
+
+ \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Zellner-Siow prior (assume $\X$ is centered)}
+Zellner's g-prior $\b \mid \phi \sim \N(\zero_p, g
+    (\X^T\X)^{-1}/\phi)$ \pause
+
+\begin{itemize}
+\item Choice of $g$?  \pause
+\item $\frac{g}{1 + g}$  weight given to the data \pause
+\item Let $\tau = 1/g$ assign $\tau \sim G(1/2, n/2)$ \pause
+\item Marginal prior on $\b \sim C(0, \phi^{-1} \X^T\X)$
+\item Can express posterior as a mixture of $g$-priors
+$$p(\tau \mid \Y) = \frac{p(\Y \mid \tau) p(\tau)}{\int p(\Y \mid \tau) p(\tau) \, d \tau}$$ \pause
+\item Problem:  no analytic expression for integral \pause
+\item Need 2 one dimensional integrals to obtain posterior. \pause
+\item What about credible intervals?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t] \frametitle{Markov Chain Monte Carlo}
+\begin{itemize}
+\item We know that $\beta_0, \b, \phi \mid \Y, g=1/\tau$ has a Normal-Gamma distribution  \pause
+\item We can show that $\tau \mid \beta_0,\b, \phi, \Y$ has a Gamma distribution \pause
+$$p(\tau \mid \b, \phi, \Y) \propto {\cal{L}}(\beta_0,\b, \phi)
+\tau^{p/2} e^{( - \tau \frac{\phi}{2} \b^T (\X^T\X) \b)}
+\tau^{1/2 - 1} e^{ - \tau n/2}$$ \pause
+\item alternate sampling from full conditional distributions given current values of other parameters.  (STA 601) \pause
+\item JAGS or STAN
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{JAGS Code: library(R2jags)}
+<<>>=
+model = function(){
+  for (i in 1:n) {
+      Y[i] ~ dnorm(beta0+ (X[i] -Xbar)*beta, phi)
+  }
+  beta0 ~ dnorm(0, .000001*phi) #precision is 2nd arg
+  beta ~ dnorm(0, phi*tau*SSX)  #precision is 2nd arg
+  phi ~ dgamma(.001, .001)
+  tau ~ dgamma(.5, .5*n)
+  g <- 1/tau
+  sigma <- pow(phi, -.5)
+}
+data = list(Y=Y, X=X, n =length(Y), SSX=sum(Xc^2),
+            Xbar=mean(X))
+ZSout = jags(data, inits=NULL,
+             parameters.to.save=c("beta0","beta", "g",
+                                  "sigma"),
+             model=model, n.iter=10000)
+@
+\end{frame}
+
+\begin{frame}[fragile] \frametitle{HPD intervals}
+
+<<echo=F,gprior>>=
+ci = confint(lm(Y ~ Xc))
+ci[2,] = ci[2,]*5/(1 + 5)
+@
+
+<<>>=
+confint(lm(Y ~ Xc))
+HPDinterval(as.mcmc(ZSout$BUGSoutput$sims.matrix))
+@
+\end{frame}
+
+\begin{frame}[fragile] \frametitle{Compare}
+<<echo=FALSE,out.height='3in',out.width='4in'>>=
+plot(Xc, Yc)
+points(sqrt(SSX/g), 0, pch=15, col=2)
+
+abline(0, ols$coef)
+abline(0, bols$coef, lty=3, lwd=3, col=2)
+abline(0, ZSout$BUGSoutput$mean$beta, lty=2, lwd=3, col=4)
+legend(1, -2,
+       legend=c("OLS", "G-prior", "ZS-prior"),
+       lty=c(1, 3, 2), lwd=3,
+       col=c(1,2,4))
+#dev.off()
+@
+
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{tiny}
+<<>>=
+ZSout
+@
+\end{tiny}
+\end{frame}
+
+\begin{frame}\frametitle{Cauchy Summary}
+\begin{itemize}
+\item Cauchy rejects prior mean if it is an "outlier"
+\item robustness related to "bounded" influence (more later)
+\item numerical integration or Monte Carlo sampling (MCMC)
+\end{itemize}
+\end{frame}
+\end{document}
+
+
+\begin{frame}
+  \frametitle{How Good are these Estimators?}
+Quadratic loss for estimating  $\b$ using estimator $\a$
+$$ L(\b, \a) =  ( \b - \a)^T(\b -\a)$$ \pause
+
+\begin{itemize}
+\item Consider our expected loss (before we see the data) of taking an
+``action'' $\a$ \pause
+\item Under OLS or the  Reference prior the Expected Mean Square Error  \pause
+  \begin{eqnarray*}
+\E_\Y[( \b - \bhat)^T(\b -\bhat) & = &\sigma^2
+  \tr[(\X^T\X)^{-1}] \pause \\
+ & = & \sigma^2 \sum_{j=1}^p \lambda_j^{-1}
+  \end{eqnarray*}
+where $\lambda_j$ are eigenvalues of $\X^T\X$.
+\pause
+\item If smallest $\lambda_j \to 0$ then MSE  $\to \infty$
+\item Note: estimate is unbiased!
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Is the $g$-prior better?}
+
+Explore Frequentist properties of using a Bayesian estimator
+
+$$\E_\Y[( \b - \bhat_g)^T(\b -\bhat_g)$$
+
+but now $\bhat_g = g/(1+g) \bhat$
+\end{frame}
+
+\begin{frame}\frametitle{Estimator Properties}
+
+  \begin{itemize}
+  \item  Bias  \pause
+  \item  Variability \pause
+  \item MSE = Bias$^2$ + Variance  (multivariate analogs) \pause
+\item Problems with OLS \& g-priors with collinearity \pause
+\item Solutions: \pause
+  \begin{itemize}
+  \item removal of terms \pause
+   \item other shrinkage estimators
+  \end{itemize}
+
+  \end{itemize}
+\end{frame}
+
+
+
+\end{document}

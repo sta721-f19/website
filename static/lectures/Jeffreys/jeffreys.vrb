@@ -1,0 +1,33 @@
+\begin{tiny}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{ZSout}
+\end{alltt}
+\begin{verbatim}
+## Inference for Bugs model at "/var/folders/n4/nj1122xj6bn5_xgbptv7bml40000gp/T//RtmpsBwZxG/model7af72c663d0.txt", fit using jags,
+##  3 chains, each with 10000 iterations (first 5000 discarded), n.thin = 5
+##  n.sims = 3000 iterations saved
+##           mu.vect   sd.vect   2.5%     25%     50%     75%    97.5%  Rhat
+## beta        3.112     0.170  2.782   2.997   3.115   3.225    3.445 1.001
+## beta0      -0.099     0.152 -0.384  -0.204  -0.099   0.001    0.204 1.002
+## g        2263.147 38967.029 48.273 146.129 282.298 697.063 9018.709 1.001
+## sigma       0.827     0.114  0.636   0.747   0.816   0.896    1.079 1.001
+## deviance   73.347     2.563 70.390  71.458  72.680  74.500   79.882 1.002
+##          n.eff
+## beta      3000
+## beta0     1200
+## g         3000
+## sigma     3000
+## deviance  1600
+##
+## For each parameter, n.eff is a crude measure of effective sample size,
+## and Rhat is the potential scale reduction factor (at convergence, Rhat=1).
+##
+## DIC info (using the rule, pD = var(deviance)/2)
+## pD = 3.3 and DIC = 76.6
+## DIC is an estimate of expected predictive error (lower deviance is better).
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+\end{tiny}
