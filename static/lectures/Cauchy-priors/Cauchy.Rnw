@@ -32,6 +32,7 @@ Model in centered parameterization
 p(\beta_0, \phi) & \propto & 1/\phi\\
 \b \mid \beta_0, \phi & \sim & \N(\zero, \frac{g}{\phi} (\X^T (\I_n - \P_{\one}) \X)^{-1})
 \end{eqnarray*}
+\pause
 
 Log Likelihood
 
@@ -43,6 +44,7 @@ $${\cal{L}}(\beta_0, \beta_1, \phi) \propto
 Since
 $$\Y = (\I - \P_{\one})\Y  + \P_{\one}\Y$$
 
+\pause
 Integrated Liklihood after integrating $\beta_0$
 $${\cal{L}}(\beta_1, \phi) \propto
 \frac{n -1}{2}\log(\phi)
