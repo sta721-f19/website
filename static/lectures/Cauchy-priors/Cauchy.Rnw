@@ -28,7 +28,7 @@ set.seed(8675309)
 
 Model in centered parameterization
 \begin{eqnarray*}
-\Y & = & \one \beta_0 + (\I_n - \P_1) \X_1 \b + \eps \\
+\Y & = & \one \beta_0 + (\I_n - \P_1) \X \b + \eps \\
 p(\beta_0, \phi) & \propto & 1/\phi\\
 \b \mid \beta_0, \phi & \sim & \N(\zero, \frac{g}{\phi} (\X^T (\I_n - \P_{\one}) \X)^{-1})
 \end{eqnarray*}
@@ -36,17 +36,17 @@ p(\beta_0, \phi) & \propto & 1/\phi\\
 
 Log Likelihood
 
-$${\cal{L}}(\beta_0, \beta_1, \phi) \propto
+$${\cal{L}}(\beta_0, \b, \phi) \propto
 \frac{n}{2}\log(\phi) - \frac{\phi}{2} \left(
   n (\beta_0 - \ybar)^2
 + (\Y_c - \X_c \b)^T(\Y_c - \X_c)\right)$$
 
 Since
-$$\Y = (\I - \P_{\one})\Y  + \P_{\one}\Y$$
+$$\Y = (\I - \P_{\one})\Y  + \P_{\one}\Y \text{ and} $\X_c \equiv (\I - \P_{\one}) \X$$
 
 \pause
 Integrated Liklihood after integrating $\beta_0$
-$${\cal{L}}(\beta_1, \phi) \propto
+$${\cal{L}}(\b, \phi) \propto
 \frac{n -1}{2}\log(\phi)
 - \frac{\phi}{2} (\Y_c - \X_c \b)^T(\Y_c - \X_c)$$
 
