@@ -4,7 +4,7 @@ abstract_short: ''
 date: '2019-09-15'
 draft: no
 math: yes
-selected: yes
+selected: no
 abstract: ''
 url_pdf:
 url_slides: ''

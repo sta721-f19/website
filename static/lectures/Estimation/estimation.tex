@@ -1,5 +1,4 @@
-%\documentclass[]{beamer}
-\documentclass[handout]{beamer}\usepackage[]{graphicx}\usepackage[]{color}
+\documentclass[]{beamer}\usepackage[]{graphicx}\usepackage[]{color}
 % maxwidth is the original width if it is less than linewidth
 % otherwise use linewidth (to make sure the graphics do not exceed the margin)
 \makeatletter
@@ -50,13 +49,14 @@
 \newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
 
 \usepackage{alltt}
+%\documentclass[handout]{beamer}
 \usepackage{graphicx}
 \usepackage{amsmath,amssymb,array,comment,eucal}
 \input{../macros}
 \usepackage{verbatim}
 
 \usetheme{default}
-\title{Cauchy Priors: Mixtures of Normals \& MCMC}
+\title{Frequentist Properties of Bayes Estimators}
 \institute{Merlise Clyde}
 \author{STA721 Linear Models Duke University}
 \date{\today}
@@ -67,139 +67,40 @@
 
 
 \begin{frame}[t]
-  \frametitle{Bayesian Estimation with 2 Block $g$-prior (Normal-Jeffreys)}
+  \frametitle{Recap: Bayesian Estimation with 2 Block $g$-prior (Normal-Jeffreys)}
 
+\begin{itemize}
+  \item
 
-Model in centered parameterization
+Model in centered parameterization $\X_c = (\I_n - \P_1) \X$
 \begin{eqnarray*}
 \Y & = & \one \beta_0 + (\I_n - \P_1) \X \b + \eps \\
+\Y & = & \one \beta_0 + (\X_c \b + \eps \\
 p(\beta_0, \phi) & \propto & 1/\phi\\
-\b \mid \beta_0, \phi & \sim & \N(\zero, \frac{g}{\phi} (\X^T (\I_n - \P_{\one}) \X)^{-1})
+\b \mid \beta_0, \phi & \sim & \N(\zero, \frac{g}{\phi} (\X_c^T \X_c)^{-1})
 \end{eqnarray*}
 \pause
 
-Log Likelihood
-
-$${\cal{L}}(\beta_0, \b, \phi) \propto
-\frac{n}{2}\log(\phi) - \frac{\phi}{2} \left(
-  n (\beta_0 - \ybar)^2
-+ (\Y_c - \X_c \b)^T(\Y_c - \X_c)\right)$$
-
-Since
-$$\Y = (\I - \P_{\one})\Y  + \P_{\one}\Y \text{ and} \X_c \equiv (\I - \P_{\one}) \X$$
-
-\pause
-Integrated Liklihood after integrating $\beta_0$
-$${\cal{L}}(\b, \phi) \propto
-\frac{n -1}{2}\log(\phi)
-- \frac{\phi}{2} (\Y_c - \X_c \b)^T(\Y_c - \X_c)$$
-
-\end{frame}
-
-\begin{frame}\frametitle{Prior Data}
-Note $$(\X^T (\I_n - \P_{\one}) \X) = (\X^T (\I_n - \P_{\one})^T (\I_n
-- \P_{\one}) \X)  = (\X -\one_n \Xbar^T)^T (\X - \one_n \Xbar) $$
-\pause
-Let  $(\X -\one_n \Xbar^T)^T (\X - \one \Xbar) = \SS_{\X} = \U^T \U$
-\pause
-
-Quadratic contribution to the log likelihood from prior after integrating out $\beta_0$
-
-$$ ( \Y_c  - \X_c \b)^T(\Y_c - \X_c\b) + ( \b^T\frac{\U^T \U}{g} \b)   $$
-\pause
-$$ ( \Y_c  - \X_c \b)^T(\Y_c - \X_c\b) + ( \zero_p -
-\frac{\U}{\sqrt{g}}\b)^T(\zero_p -  \frac{\U}{\sqrt{g}} \b)   $$
-
-Prior observations  with $Yc =  0$.
-\end{frame}
-
-
-\begin{frame}\frametitle{Example: g=5, n=30}
-
-In SLR it is like an extra $Y_0 = 0$ at $\X_o = \sqrt{\frac{\SS_x}{g}}$:
-$$ ( \Y_c  - \X_c \b)^T(\Y_c - \X_c\b) + (0 - \sqrt{\frac{\SS_x}{g}}\b)^T (0 - \sqrt{\frac{\SS_X}{g}} \b)   $$
-\pause
-
-
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
-\includegraphics[width=\maxwidth,height=2.5in]{figure/unnamed-chunk-1-1}
-
-\end{knitrout}
-
-\end{frame}
-
-
-
-\begin{frame}
-  \frametitle{Disadvantages of Conjugate Priors}
-  Disadvantages: \pause
-\begin{itemize}
-\item Results  may have be sensitive to prior ``outliers'' due to
-  linear updating \pause
-\item Problem potentially with all Normal priors, not just the
-  $g$-prior. \pause
-\item Cannot capture all possible prior beliefs \pause
-\item Mixtures of Conjugate Priors
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Mixtures of Conjugate Priors}
-  \begin{theorem}[Diaconis \& Ylivisaker 1985]  Given a sampling model
-  $p(y \mid \tb)$ from an exponential family, any prior distribution
-  can be expressed as a mixture of conjugate prior distributions
- \end{theorem}
-
- \begin{itemize}
- \item Prior $p(\tb) = \int p(\tb \mid \omega) p(\omega)\, d \omega$ \pause
- \item Posterior \pause
-   \begin{eqnarray*}
-   p(\tb \mid \Y)  &\propto & \int p(\Y \mid \tb) p(\tb\mid \omega)
-   p(\omega) \, d\omega \pause \\
- & \propto & \int  \frac{  p(\Y \mid \tb) p(\tb \mid \omega) } {p(\Y \mid
-   \omega)}  p(\Y \mid
- \omega) p(\omega ) \, d \omega  \pause \\
-& \propto & \int p(\tb \mid \Y, \omega)  p(\Y \mid
- \omega) p(\omega ) \, d \omega \pause \\
- p(\tb \mid \Y) & =  & \frac{\int p(\tb \mid \Y, \omega)  p(\Y \mid
- \omega) p(\omega ) \, d \omega }
-{\int p(\Y \mid
- \omega) p(\omega ) \, d \omega }
-       \end{eqnarray*}
-
- \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Zellner-Siow prior (assume $\X$ is centered)}
+\item Zellner-Siow prior (assume $\X$ is centered) \pause
 Zellner's g-prior $\b \mid \phi \sim \N(\zero_p, g
     (\X_c^T\X_c)^{-1}/\phi)$ \pause
 
-\begin{itemize}
-\item Choice of $g$?  \pause
-\item $\frac{g}{1 + g}$  weight given to the data \pause
 \item Let $\tau = 1/g$ assign $\tau \sim G(1/2, n/2)$ \pause
-\item Marginal prior on $\b \sim C(0, \phi^{-1} (\X_c^T\X_c/n)^{-1})$
-\item Can express posterior as a mixture of $g$-priors
-$$p(\tau \mid \Y) = \frac{p(\Y \mid \tau) p(\tau)}{\int p(\Y \mid \tau) p(\tau) \, d \tau}$$ \pause
-\item Problem:  no analytic expression for integral \pause
-\item Need 2 one dimensional integrals to obtain posterior. \pause
-\item What about credible intervals?
+\item Marginal prior on $\b \sim C(0, \phi^{-1} (\X_c^T\X_c/n)^{-1})$ \pause
+\item Use Gibbs sampling or MCMC
 \end{itemize}
 \end{frame}
 
-\begin{frame}[t] \frametitle{Markov Chain Monte Carlo}
-\begin{itemize}
-\item We know that $\beta_0, \b, \phi \mid \Y, g=1/\tau$ has a Normal-Gamma distribution  \pause
-\item We can show that $\tau \mid \beta_0,\b, \phi, \Y$ has a Gamma distribution \pause
-$$p(\tau \mid \b, \phi, \Y) \propto {\cal{L}}(\beta_0,\b, \phi)
-\tau^{p/2} e^{( - \tau \frac{\phi}{2} \b^T (\X^T\X) \b)}
-\tau^{1/2 - 1} e^{ - \tau n/2}$$ \pause
-\item alternate sampling from full conditional distributions given current values of other parameters.  (STA 601) \pause
-\item JAGS or STAN
-\end{itemize}
-\end{frame}
+
+
+
+
+
+
+
+
+
+
 
 
 \begin{frame}[fragile]{JAGS Code: library(R2jags)}
@@ -234,7 +135,7 @@ $$p(\tau \mid \b, \phi, \Y) \propto {\cal{L}}(\beta_0,\b, \phi)
 ##    Observed stochastic nodes: 30
 ##    Unobserved stochastic nodes: 4
 ##    Total graph size: 174
-##
+## 
 ## Initializing model
 \end{verbatim}
 \end{kframe}
@@ -276,7 +177,7 @@ $$p(\tau \mid \b, \phi, \Y) \propto {\cal{L}}(\beta_0,\b, \phi)
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
-\includegraphics[width=\maxwidth,height=2.5in]{figure/unnamed-chunk-4-1}
+\includegraphics[width=\maxwidth,height=2.5in]{figure/unnamed-chunk-3-1} 
 
 \end{knitrout}
 
@@ -290,7 +191,7 @@ $$p(\tau \mid \b, \phi, \Y) \propto {\cal{L}}(\beta_0,\b, \phi)
 \hlstd{ZSout}
 \end{alltt}
 \begin{verbatim}
-## Inference for Bugs model at "/var/folders/n4/nj1122xj6bn5_xgbptv7bml40000gp/T//RtmpABkjXF/model185e51fc26a9b.txt", fit using jags,
+## Inference for Bugs model at "/var/folders/n4/nj1122xj6bn5_xgbptv7bml40000gp/T//RtmpwDmY3Y/model17fcc74341fa7.txt", fit using jags,
 ##  3 chains, each with 10000 iterations (first 5000 discarded), n.thin = 5
 ##  n.sims = 3000 iterations saved
 ##           mu.vect   sd.vect   2.5%     25%     50%     75%    97.5%  Rhat
@@ -305,10 +206,10 @@ $$p(\tau \mid \b, \phi, \Y) \propto {\cal{L}}(\beta_0,\b, \phi)
 ## g         3000
 ## sigma     3000
 ## deviance  1600
-##
+## 
 ## For each parameter, n.eff is a crude measure of effective sample size,
 ## and Rhat is the potential scale reduction factor (at convergence, Rhat=1).
-##
+## 
 ## DIC info (using the rule, pD = var(deviance)/2)
 ## pD = 3.3 and DIC = 76.6
 ## DIC is an estimate of expected predictive error (lower deviance is better).
@@ -322,7 +223,7 @@ $$p(\tau \mid \b, \phi, \Y) \propto {\cal{L}}(\beta_0,\b, \phi)
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
-\includegraphics[width=3in,height=3in]{figure/marginal-1}
+\includegraphics[width=3in,height=3in]{figure/marginal-1} 
 
 \end{knitrout}
 
@@ -340,7 +241,7 @@ $$p(\tau \mid \b, \phi, \Y) \propto {\cal{L}}(\beta_0,\b, \phi)
   \hlkwd{theme_light}\hlstd{()}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=2in,height=2in]{figure/unnamed-chunk-6-1}
+\includegraphics[width=2in,height=2in]{figure/unnamed-chunk-5-1} 
 
 \end{knitrout}
 
@@ -358,7 +259,7 @@ $$p(\tau \mid \b, \phi, \Y) \propto {\cal{L}}(\beta_0,\b, \phi)
 
 
 \begin{frame}
-  \frametitle{How Good are these Estimators?}
+  \frametitle{How Good are Bayes Estimators?}
 Quadratic loss for estimating  $\b$ using estimator $\a$
 $$ L(\b, \a) =  ( \b - \a)^T(\b -\a)$$ \pause
 
@@ -381,20 +282,25 @@ where $\lambda_j$ are eigenvalues of $\X^T\X$.
 \begin{frame}
   \frametitle{Is the $g$-prior better?}
 
-Explore Frequentist properties of using a Bayesian estimator
+\begin{itemize}
+  \item
 
+\item Explore Frequentist properties of using a Bayesian estimator
 $$\E_\Y[( \b - \bhat_g)^T(\b -\bhat_g)$$
-
 but now $\bhat_g = g/(1+g) \bhat$  \pause
 
-\vfill when is the $g$ prior better than the Reference prior or OLS?  Is it always better?
+\item Sampling distribution of $\bhat_g  = \frac{g}{1+g}(\X^\X)^{-1} \X^T\Y$  \pause
+\item HW: show that there is a value of $g$ prior such that the g-prior is always better than the Reference prior/OLS
+
+\item Potential problem: MSE also blows up if smallest eigenvalue goes to zero!
+\end{itemize}
 \end{frame}
 
 \begin{frame}\frametitle{Estimator Properties}
 
   \begin{itemize}
   \item  Bias  \pause
-  \item  Variability \pause
+  \item  Variance \pause
   \item MSE = Bias$^2$ + Variance  (multivariate analogs) \pause
 \item Problems with OLS, g-priors \& mixtures of g-priors with collinearity \pause
 \item Solutions: \pause
@@ -411,7 +317,123 @@ but now $\bhat_g = g/(1+g) \bhat$  \pause
 
 
 
+\begin{frame}
+  \frametitle{Canonical Representation \& Ridge Regression}
 
+
+  \begin{itemize}
+\item  Assume that $\X$ has been centered and standardized so that $\X^T\X
+  = \corr(\X)$ \pause  (use {\tt scale} or {\tt sweep} functions in {\tt R}) \pause
+  \item Write $\X = \U_p L \V^T$ Singular Value Decomposition \pause where
+    $\U_p^T\U_p = \I_p$ and $\V$ is $p \times p$ orthogonal matrix,
+    $L$ is diagonal \pause
+  $$ \Y = \one \alpha +  \U_p L \V^T \b + \eps $$ \pause
+  \item  Let $\g =  \V^T \b$ and create
+   $\U$   an $n \times n$  orthogonal matrix \pause
+  $$\U = [\U_0 \, | \, \U_p \,| \,\U_{n-p-1}]$$
+  where $\U_0 = \one/\sqrt{n}$  \pause
+  \item $\U_0^T\U_p = 0$, $\U^T_0 \U_{n-p-1} = 0$ and  $\U_p^T\U_{n - p -1} = 0$ (orthogonal columns)
+  \end{itemize}
+\end{frame}
+  \begin{frame} {Orthogonal Regression}
+Rotate by multiplyting by $\U^T$:
+  \begin{eqnarray*}
+    \U^T \Y & = & \U^T \one \alpha + \U^T \U_p L \V^T \b + \U^T \eps \pause \\
+    \Y^*
+   &=& \left[
+  \begin{array}{cc}
+  \sqrt{n} & \zero_p^T\\ \zero_p & L \\  \zero_{n-p -1} & \zero_{n - p - 1  \times p}
+  \end{array}
+ \right]
+\left(    \begin{array}{c}
+      \alpha \\
+  \g
+    \end{array} \right)
++  \eps^*
+  \end{eqnarray*} \pause
+
+
+  \begin{itemize}
+  \item   $y^*_0 \equiv \hat{\alpha} = \ybar$ \pause
+\item $\hat{\g} =( L^TL)^{-1} L^T \U^T_p\Y$ or $\hat{\gamma}_i = y^*_i/l_i$ for
+  $i = 1, \ldots, p$ \pause
+\item  $\Var(\hat{\gamma}_i) = \sigma^2/l_i^2$
+  \end{itemize}
+Directions in $\X$ space $\U_j$ with small eigenvectors $l_i$ have
+the largest variances.  Unstable directions.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Ridge  Regression \& Independent Prior}
+  (Another) Normal Conjugate Prior Distribution on $\g$: $$\g \mid \phi \sim \N(\zero_p, \frac{1}{ \phi
+    k} \I_p)$$ \pause
+
+Posterior mean
+$$
+ \tilde{\g} =( L^TL + k \I)^{-1} L^T \U^T_p\Y  = ( L^TL + k \I)^{-1}
+ L^TL\hat{\g}
+$$\pause
+
+ $$\tilde{\gamma}_i = \frac{l_i^2}{l_i^2 + k} \hat{\gamma}_i =
+ \frac{\lambda_i}{\lambda_i + k} \hat{\gamma}_i $$ \pause
+ \begin{itemize}
+\item When $\lambda_i \to 0$ then $\tilde{\gamma}_i \to 0$
+
+\item When $k \to 0$ we get OLS back but if $k$ gets too  big posterior
+  mean goes to zero.
+ \end{itemize}
+
+\end{frame}
+\begin{frame}
+  \frametitle{Transform}
+  \begin{itemize}
+  \item
+  Transform back $\tilde{\b} = \V \tilde{\g}$ \pause
+  $$\tilde{\b} = (\X^T\X + k \I)^{-1}  \X^T\X \bhat$$ \pause
+\item importance of standardizing \pause
+
+\item Is there a value of $k$ for which ridge is better in terms of
+  Expected MSE than OLS? \pause
+\item Choice of $k$?
+  \end{itemize}
+\end{frame}
+\begin{frame}\frametitle{MSE}
+Can show that
+ $$\E[(\b - \btilde)^T(\b - \btilde)] = \E[(\g - \tilde{\g})^T(\g - \tilde{\g}]$$
+  \pause
+ \begin{itemize}
+ \item $\Var(\tilde{\gamma}_i) = \sigma^2 l_i^2 /(l_i^2 +
+   k)^2$ \pause
+\item  Bias of $\tilde{\g}$ is $-k \gamma_i/(l_i^2 + k)$ \pause
+ \item  MSE $$\sigma^2 \sum_i \frac{l_i^2}{(l_i^2 + k)^2} +  k^2
+   \sum_i \frac{\gamma_i^2} {(l_i^2 + k)^2} $$
+ \end{itemize}
+The derivative with respect to $k$ is negative at $k=0$, hence the
+function is decreasing. \pause
+
+\vspace{12pt}
+Since $k = 0$ is OLS, this means that is a value of $k$ that will
+always be better than OLS
+\end{frame}
+
+\begin{frame}  \frametitle{Alternative Motivation}
+  \begin{itemize}
+  \item If  $\bhat$ is unconstrained  expect high variance with nearly
+    singular $\X$ \pause
+  \item Let $\Y^c = (\I - \P_1) \Y$  and $\X^c$ the centered and
+    standardized  $\X$ matrix \pause
+\item Control how large coefficients may grow \pause
+    $$\min_{\b} (\Y^c - \X^c \b)^T (\Y^c - \X^c\b)$$
+    subject to
+    $$ \sum \beta_j^2 \le t$$ \pause
+  \item Equivalent Quadratic Programming Problem
+    $$\min_{\b} \| \Y^c - \X^c \b\|^2 + k \|\b\|^2$$ \pause
+  \item ``penalized'' likelihood \pause
+  \end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Picture}
+
+\end{frame}
 
 
 

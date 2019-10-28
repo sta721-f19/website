@@ -1,6 +1,6 @@
 ---
 draft: false
-featured: true
+featured: false
 abstract: "In this lecture we will go show how Cauchy priors can be derived as a mixture of normal distributions and introduce MCMC sampling for estimation."
 abstract_short:  "In this lecture we will go show how Cauchy priors can be derived as a mixture of normal distributions and introduce MCMC sampling for estimation."
 authors:

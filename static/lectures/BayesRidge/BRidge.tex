@@ -1,0 +1,308 @@
+\documentclass[handout]{beamer}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+%\documentclass[]{beamer}
+%\usepackage[dvips]{color}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,array,comment,eucal,url}
+\input{../macros}
+\usepackage{verbatim}
+
+\usetheme{default}
+
+\title{Bayesian Ridge and Shrinkage}
+\subtitle{Readings Chapter 15 Christensen}
+\institute{Merlise Clyde}
+\author{STA721 Linear Models Duke University}
+\date{\today}
+\logo{duke.eps}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+\maketitle
+
+\begin{frame}
+  \frametitle{Longley Data}
+  \centerline{\includegraphics[height=3in]{longley-pairs}}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{OLS}
+\begin{small}
+\begin{verbatim}
+> longley.lm = lm(Employed ~ ., data=longley)
+> summary(longley.lm)
+
+Coefficients:
+               Estimate Std. Error t value Pr(>|t|)
+(Intercept)  -3.482e+03  8.904e+02  -3.911 0.003560 **
+GNP.deflator  1.506e-02  8.492e-02   0.177 0.863141
+GNP          -3.582e-02  3.349e-02  -1.070 0.312681
+Unemployed   -2.020e-02  4.884e-03  -4.136 0.002535 **
+Armed.Forces -1.033e-02  2.143e-03  -4.822 0.000944 ***
+Population   -5.110e-02  2.261e-01  -0.226 0.826212
+Year          1.829e+00  4.555e-01   4.016 0.003037 **
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.3049 on 9 degrees of freedom
+Multiple R-squared: 0.9955,	Adjusted R-squared: 0.9925
+F-statistic: 330.3 on 6 and 9 DF,  p-value: 4.984e-10
+\end{verbatim}
+\end{small}
+\end{frame}
+\begin{frame}
+  \frametitle{Ridge Trace}
+  {\tt{plot(MASS::lm.ridge(Employed $\sim$ ., data=longley))}}
+  \centerline{\includegraphics[height=3in]{ridge-trace}}
+\end{frame}
+\begin{frame}[fragile]
+\frametitle{Generalized Cross-validation: Golub et al (1979)}
+
+\begin{small}
+\begin{verbatim}
+> select(lm.ridge(Employed ~ ., data=longley,
+         lambda=seq(0, 0.1, 0.0001)))
+
+modified HKB estimator is 0.004275357
+modified L-W estimator is 0.03229531
+smallest value of GCV  at 0.0028
+
+> longley.RReg = lm.ridge(Employed ~ ., data=longley,
+                          lambda=0.0028)
+> coef(longley.RReg)
+           GNP.deflator    GNP     Unemployed  Armed.Forces
+-2.950e+03 -5.381e-04   -1.822e-02  -1.76e-02 -9.607e-03
+
+ Population     Year
+-1.185e-01  1.557e+00
+\end{verbatim}
+
+\end{small}
+{\url{https://www.jstor.org/stable/1268518?seq=1#metadata_info_tab_contents}}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Bayesian Ridge: Prior on $k$}
+  Reparameterization:
+  \begin{eqnarray*}
+  \Y  & =  &\one \alpha + (\I - \P_{\one}) \X S^{-1/2} S^{1/2} \b +
+  \eps   \pause \\
+      & = & \one \alpha + \X^s \b^s + \eps \pause\\
+  S & = &\textsf{diag}[ (n-1) \Var(X_j) ]  \pause \\
+  (\X^s)^T \X^s & = & \textsf{Corr}(\X) \pause
+  \end{eqnarray*}
+
+Hierarchical prior \pause
+\begin{itemize}
+\item $p(\alpha \mid \phi, \b^s, \kappa) \propto 1$ \pause
+\item $\b_s \mid \phi, \kappa \sim \N(\zero, \I (\phi \kappa )^{-1})$ \pause
+\item $p(\phi \mid \kappa) \propto 1/\phi$
+\item prior on $\kappa$?  Take $\kappa \mid \phi \sim  \G(1/2, 1/2)$ \pause
+\end{itemize}
+\end{frame}
+\begin{frame}
+  \frametitle{Posterior Distributions}
+Joint Distribution
+  \begin{itemize}
+  \item $\alpha, \b_s, \phi \mid \kappa, \Y$  Normal-Gamma family given $\Y$
+    and $\kappa$ \pause
+  \item $\kappa \mid \Y$  not tractable \pause
+  \end{itemize}
+Obtain marginal for  $\b_s$ via  \pause
+\begin{itemize}
+\item Numerical integration \pause
+\item MCMC:  Full conditionals \pause \\  Pick initial values $\alpha^{(0)}, \b_s^{(0)},
+  \phi^{(0)}$, \pause \\
+  Set  $t = 1$
+  \begin{enumerate}
+  \item Sample $\kappa^{(t)} \sim p(\kappa \mid \alpha^{(t-1)},
+    \b_s^{(t-1)}, \phi^{(t-1)}, \Y)$ \pause
+   \item Sample $\alpha^{(t)}, \b_s^{(t)}, \phi^{(t)} \mid \kappa^{(t)},
+     \Y$ \pause
+ \item Set $t = t + 1$ and repeat until $t > T$ \pause
+  \end{enumerate}
+Use Samples  $\alpha^{(t)}, \b_s^{(t)}, \phi^{(t)}, \kappa^{(t)}$ for $t
+= B, \ldots, T$ for inference \\
+Change of variables to get back to $\b$
+\end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{Full Conditional for $\kappa$}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Rao-Blackwellization}
+
+What is ``best'' estimate of $\b_s$ from Bayesian perspective?
+\begin{itemize}
+\item  Loss  $(\b_s - \a)^T(\b_s - \a)$   under action $\a$
+\item  Decision Theory:  Take action $\a$ that minimizes posterior
+  expected loss which is posterior mean of $\b_s$.
+
+\item Estimate of posterior mean is Ergodic Average of MCMC:
+  $\sum_i \b_s^{(t)}/T \to $
+\item Posterior mean given $\kappa$
+  $$\tilde{\b}_s(\kappa) = (\X^{sT}\X^s + \kappa \I)^{-1}  \X^{sT}\X^s \bhat_s$$ \pause
+
+
+\item Rao-Blackwell Estimate
+  $$\frac{1}{T}\sum_t (\X^{sT}\X^s + \kappa^{(t)} \I)^{-1}  \X^{sT}\X^s \hat{\b}_s$$ \pause
+
+
+  \end{itemize}
+
+
+
+\end{frame}
+
+\begin{frame} \frametitle{Testimators \& Canonical Model}
+
+$$\U_p \Y = L V^T \b_s + \epsilon_p \Leftrightarrow \U_p \Y = L\g + \epsilon_p$$
+
+Goldstein \& Smith (1974) have shown that if
+
+\begin{enumerate}
+\item
+$0 \leq  h_i \leq 1$ and  $\tilde{\gamma}_i = h_i \hat{\gamma}_i$
+\item $\frac{\gamma^2_i}{\Var(\hat{\gamma}_i)} < \frac{1 + h_i}{1 - h_i}$
+\end{enumerate}
+then   $\tilde{\gamma}_i$ has smaller MSE than $\hat{\gamma}_i$
+
+\vspace{14pt}
+Case:  If $\gamma_j^2 < \Var(\hat{\gamma}_i) = \sigma^2/l_i^2$  then
+$h_i = 0$ and $\tilde{\gamma}_i$ is better.
+
+\vspace{11pt}
+Apply: Estimate $\sigma^2$ with SSE/(n - p - 1) and $\gamma_i$ with
+$\hat{\gamma}_i$.  Set $h_i = 0$ if t-statistic is less than 1.
+\vfill
+``testimator'' - see also Sclove (JASA 1968) and Copas ( JRSSB 1983)
+\end{frame}
+\begin{frame} \frametitle{Generalized Ridge}
+
+
+Instead of $\gamma_j \simiid \N(0, \sigma^2/\kappa)$ take
+
+$$\gamma_j \ind \N(0, \sigma^2/\kappa_i)$$  \pause
+
+Then Condition of Goldstein \& Smith becomes
+
+$$
+\gamma_i^2 < \sigma^2\left[ \frac{2}{\kappa_i} + \frac{1}{l_i^2}  \right]
+$$ \pause
+\begin{itemize}
+\item
+If $l_i$ is small almost any $\kappa_i$ will improve over OLS \pause
+\item
+if $l_i^2$ is large then only very small values of $\kappa_i$ will give an
+improvement. \pause
+\item Prior on $\kappa_i$?   \pause
+\item Prior that can capture the feature above?
+
+\end{itemize}
+
+\end{frame}
+\begin{frame}
+  \begin{itemize}
+\item Induced prior on $\b_s$?
+$$\gamma_j \mid \sigma^2, \kappa_j  \ind \N(0, \sigma^2/\kappa_j) \Leftrightarrow
+\b_s \sim \N(\zero, \sigma^2 \V\ \K^{-1} \V^T)$$
+which is not diagonal.
+  \item  Or start with $$\b_s  \mid \sigma^2, \K \sim \N(0, \sigma^2 \K^{-1})$$
+ \item loss of invarince with linear transformations of $\X^s$
+\item $\X^s \A \A^{-1} \b = \Z \alphav$ where $\A^{-1} \b = \alphav$
+  \end{itemize}
+\end{frame}
+\begin{frame} \frametitle{Related Regression on PCA}
+  \begin{itemize}
+  \item
+  Principal Components of $\X$ may be obtained via the Singular Value
+  Decomposition:
+
+$$\X = \U_p \L \V^T$$
+\pause
+\item the $l^2_i$ are the eigenvalues of $\X^T\X$ \pause
+  \begin{align*}
+ \Y & = \one \alpha + \U \L \V^T \b + \eps  \\
+    & = \one \alpha + \F \g + \eps \\
+  \end{align*}
+\item Columns $\F_i \propto \U_i$ are the principal components of the
+  data multivariate data $\X_1, \ldots, \X_p$ \pause
+\item If the direction $\F_i$ is ill-defined ($l_i = 0$  or $\l_i < \eps$
+     then we may decide to not use $\F_i$ in the model.  \pause
+\item equivalent to setting
+  \begin{itemize}
+  \item $\tilde{\gamma}_i = \hat{\gamma}_i$ if  $l_i\geq \delta$
+  \item $\tilde{\gamma}_i = 0$ if  $l_i < \eps$ \pause
+  \end{itemize}
+  \end{itemize}
+How to choose $\delta$?   Why should $\Y$ be related to first $k$
+principal components?
+\end{frame}
+\begin{frame} \frametitle{Summary }
+
+  \begin{itemize}
+  \item OLS can clearly be dominated by other estimators for
+    extimating $\b$  \pause
+  \item Lead to Bayes like estimators \pause
+  \item choice of penalties or prior hyper-parameters \pause
+  \item hierarchical model with prior on $\kappa_i$ \pause
+  \item Shrinkage, dimension reduction \& variable selection ? \pause
+  \item what loss function?  Estimation versus prediction?  Copas 1983
+  \end{itemize}
+
+\end{frame}
+
+
+
+\end{document}
+

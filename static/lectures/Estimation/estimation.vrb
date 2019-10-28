@@ -1,0 +1,16 @@
+\frametitle{Joint Distribution of $\sigma$ and $g/(1 + g)$}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{ggplot}\hlstd{(postdf,} \hlkwd{aes}\hlstd{(}\hlkwc{x}\hlstd{=sigma,} \hlkwc{y}\hlstd{=shrinkage) )} \hlopt{+}
+ \hlkwd{stat_density_2d}\hlstd{(}\hlkwd{aes}\hlstd{(}\hlkwc{fill} \hlstd{= ..level..),}
+                 \hlkwc{geom} \hlstd{=} \hlstr{"polygon"}\hlstd{,} \hlkwc{colour}\hlstd{=}\hlstr{"white"}\hlstd{)} \hlopt{+}
+  \hlkwd{theme_light}\hlstd{()}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=2in,height=2in]{figure/unnamed-chunk-5-1}
+
+\end{knitrout}
+
+

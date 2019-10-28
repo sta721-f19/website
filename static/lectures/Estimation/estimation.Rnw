@@ -1,0 +1,373 @@
+\documentclass[]{beamer}
+%\documentclass[handout]{beamer}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,array,comment,eucal}
+\input{../macros}
+\usepackage{verbatim}
+
+\usetheme{default}
+\title{Frequentist Properties of Bayes Estimators}
+\institute{Merlise Clyde}
+\author{STA721 Linear Models Duke University}
+\date{\today}
+
+
+\begin{document}
+\maketitle
+
+<<setup, echo=F>>=
+suppressMessages(library(R2jags))
+suppressMessages(library(ggplot2))
+suppressMessages(library(dplyr))
+set.seed(8675309)
+@
+
+\begin{frame}[t]
+  \frametitle{Recap: Bayesian Estimation with 2 Block $g$-prior (Normal-Jeffreys)}
+
+\begin{itemize}
+  \item
+
+Model in centered parameterization $\X_c = (\I_n - \P_1) \X$
+\begin{eqnarray*}
+\Y & = & \one \beta_0 + (\I_n - \P_1) \X \b + \eps \\
+\Y & = & \one \beta_0 + (\X_c \b + \eps \\
+p(\beta_0, \phi) & \propto & 1/\phi\\
+\b \mid \beta_0, \phi & \sim & \N(\zero, \frac{g}{\phi} (\X_c^T \X_c)^{-1})
+\end{eqnarray*}
+\pause
+
+\item Zellner-Siow prior (assume $\X$ is centered) \pause
+Zellner's g-prior $\b \mid \phi \sim \N(\zero_p, g
+    (\X_c^T\X_c)^{-1}/\phi)$ \pause
+
+\item Let $\tau = 1/g$ assign $\tau \sim G(1/2, n/2)$ \pause
+\item Marginal prior on $\b \sim C(0, \phi^{-1} (\X_c^T\X_c/n)^{-1})$ \pause
+\item Use Gibbs sampling or MCMC
+\end{itemize}
+\end{frame}
+
+
+
+<<simdata, echo=F, include=FALSE>>=
+set.seed(8675309)
+ X = rnorm(30, 0, 1)
+ Xc = X - mean(X)
+ Y = Xc* 3 + rnorm(30, 0, 1)
+ Yc = Y - mean(Y)
+ ols = lm(Yc ~ Xc -1)
+ SSX = sum(Xc^2)
+ g = 5
+
+ Xo = sqrt(SSX/g)
+ Xcomp = c(Xc, Xo)
+ Ycomp = c(Yc, 0)
+ bols = lm(Ycomp ~ Xcomp -1)
+
+df = data.frame(Yc = Yc, Xc=Xc)
+df = rbind(df, c(0, sqrt(SSX/g)))
+df$data = c(rep("obs", 30), "prior")
+coef.df = data.frame(slope = c(ols$coef, bols$coef),
+                     intercept=c(0,0))
+
+coef.df$prior = c("flat", "g-prior")
+
+@
+
+
+
+
+
+
+
+
+
+\begin{frame}[fragile]{JAGS Code: library(R2jags)}
+<<>>=
+model = function(){
+  for (i in 1:n) {
+      Y[i] ~ dnorm(beta0+ (X[i] -Xbar)*beta, phi)
+  }
+  beta0 ~ dnorm(0, .000001*phi) #precision is 2nd arg
+  beta ~ dnorm(0, phi*tau*SSX)  #precision is 2nd arg
+  phi ~ dgamma(.001, .001)
+  tau ~ dgamma(.5, .5*n)
+  g <- 1/tau
+  sigma <- pow(phi, -.5)
+}
+data = list(Y=Y, X=X, n =length(Y), SSX=sum(Xc^2),
+            Xbar=mean(X))
+ZSout = jags(data, inits=NULL,
+             parameters.to.save=c("beta0","beta", "g",
+                                  "sigma"),
+             model=model, n.iter=10000)
+@
+\end{frame}
+
+\begin{frame}[fragile] \frametitle{HPD intervals}
+
+<<echo=F,gprior-old>>=
+ci = confint(lm(Y ~ Xc))
+ci[2,] = ci[2,]*5/(1 + 5)
+@
+
+<<>>=
+confint(lm(Y ~ Xc))
+HPDinterval(as.mcmc(ZSout$BUGSoutput$sims.matrix))
+@
+\end{frame}
+
+\begin{frame}[fragile] \frametitle{Compare}
+
+<<echo=F, out.height='2.5in', fig.width=6, fig.height=4>>=
+df = data.frame(Yc = Yc, Xc=Xc)
+df = rbind(df, c(0, sqrt(SSX/g)))
+df$data = c(rep("obs", 30), "prior")
+coef.df = data.frame(slope = c(ols$coef, bols$coef, ZSout$BUGSoutput$mean$beta),
+                     intercept=c(0,0,0))
+
+coef.df$prior = c("flat", "g-prior", "Cauchy")
+ggplot(df, aes(y=Yc, x=Xc, shape=data)) +
+  geom_point() +
+  geom_abline(data=coef.df, aes(col=prior, linetype=prior,
+                                slope=slope,
+                                intercept=intercept)) +
+ # geom_point(aes(y=0, x= sqrt(SSX/g), col="prior data")) +
+  scale_color_manual(values=c("#999999", "#E69F00", "red"
+                              , "#56B4E9")) +
+theme_light()
+
+@
+
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{tiny}
+<<>>=
+ZSout
+@
+\end{tiny}
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{Posterior Distribution of shrinkage}
+
+<<marginal, echo=FALSE, out.width='3in', out.height='3in', messages=FALSE, warning=FALSE>>=
+postdf = data.frame(ZSout$BUGSoutput$sims.matrix) %>%
+         mutate(shrinkage = g/(1+g))
+lp = ggplot(postdf, aes(x=shrinkage, y=..density..)) +
+           geom_histogram(bins=25) + geom_density() +
+           theme_light()
+lp
+@
+
+
+\end{frame}
+
+\begin{frame}[fragile] \frametitle{Joint Distribution of $\sigma$ and $g/(1 + g)$}
+
+<<out.width='2in',out.height='2in'>>=
+ggplot(postdf, aes(x=sigma, y=shrinkage) ) +
+ stat_density_2d(aes(fill = ..level..),
+                 geom = "polygon", colour="white") +
+  theme_light()
+
+@
+
+
+\end{frame}
+
+\begin{frame}\frametitle{Cauchy Summary}
+\begin{itemize}
+\item Cauchy rejects prior mean if it is an "outlier"
+\item robustness related to "bounded" influence (more later)
+\item requires numerical integration or Monte Carlo sampling (MCMC)
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+  \frametitle{How Good are Bayes Estimators?}
+Quadratic loss for estimating  $\b$ using estimator $\a$
+$$ L(\b, \a) =  ( \b - \a)^T(\b -\a)$$ \pause
+
+\begin{itemize}
+\item Consider our expected loss (before we see the data) of taking an
+``action'' $\a$ \pause
+\item Under OLS or the  Reference prior the Expected Mean Square Error  \pause
+  \begin{eqnarray*}
+\E_\Y[( \b - \bhat)^T(\b -\bhat) & = &\sigma^2
+  \tr[(\X^T\X)^{-1}] \pause \\
+ & = & \sigma^2 \sum_{j=1}^p \lambda_j^{-1}
+  \end{eqnarray*}
+where $\lambda_j$ are eigenvalues of $\X^T\X$.
+\pause
+\item If smallest $\lambda_j \to 0$ then MSE  $\to \infty$
+\item Note: estimate is unbiased!
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Is the $g$-prior better?}
+
+\begin{itemize}
+  \item
+
+\item Explore Frequentist properties of using a Bayesian estimator
+$$\E_\Y[( \b - \bhat_g)^T(\b -\bhat_g)$$
+but now $\bhat_g = g/(1+g) \bhat$  \pause
+
+\item Sampling distribution of $\bhat_g  = \frac{g}{1+g}(\X^\X)^{-1} \X^T\Y$  \pause
+\item HW: show that there is a value of $g$ prior such that the g-prior is always better than the Reference prior/OLS
+
+\item Potential problem: MSE also blows up if smallest eigenvalue goes to zero!
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Estimator Properties}
+
+  \begin{itemize}
+  \item  Bias  \pause
+  \item  Variance \pause
+  \item MSE = Bias$^2$ + Variance  (multivariate analogs) \pause
+\item Problems with OLS, g-priors \& mixtures of g-priors with collinearity \pause
+\item Solutions: \pause
+  \begin{itemize}
+  \item removal of terms \pause
+   \item other shrinkage estimators
+  \end{itemize}
+
+  \end{itemize}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}
+  \frametitle{Canonical Representation \& Ridge Regression}
+
+
+  \begin{itemize}
+\item  Assume that $\X$ has been centered and standardized so that $\X^T\X
+  = \corr(\X)$ \pause  (use {\tt scale} or {\tt sweep} functions in {\tt R}) \pause
+  \item Write $\X = \U_p L \V^T$ Singular Value Decomposition \pause where
+    $\U_p^T\U_p = \I_p$ and $\V$ is $p \times p$ orthogonal matrix,
+    $L$ is diagonal \pause
+  $$ \Y = \one \alpha +  \U_p L \V^T \b + \eps $$ \pause
+  \item  Let $\g =  \V^T \b$ and create
+   $\U$   an $n \times n$  orthogonal matrix \pause
+  $$\U = [\U_0 \, | \, \U_p \,| \,\U_{n-p-1}]$$
+  where $\U_0 = \one/\sqrt{n}$  \pause
+  \item $\U_0^T\U_p = 0$, $\U^T_0 \U_{n-p-1} = 0$ and  $\U_p^T\U_{n - p -1} = 0$ (orthogonal columns)
+  \end{itemize}
+\end{frame}
+  \begin{frame} {Orthogonal Regression}
+Rotate by multiplyting by $\U^T$:
+  \begin{eqnarray*}
+    \U^T \Y & = & \U^T \one \alpha + \U^T \U_p L \V^T \b + \U^T \eps \pause \\
+    \Y^*
+   &=& \left[
+  \begin{array}{cc}
+  \sqrt{n} & \zero_p^T\\ \zero_p & L \\  \zero_{n-p -1} & \zero_{n - p - 1  \times p}
+  \end{array}
+ \right]
+\left(    \begin{array}{c}
+      \alpha \\
+  \g
+    \end{array} \right)
++  \eps^*
+  \end{eqnarray*} \pause
+
+
+  \begin{itemize}
+  \item   $y^*_0 \equiv \hat{\alpha} = \ybar$ \pause
+\item $\hat{\g} =( L^TL)^{-1} L^T \U^T_p\Y$ or $\hat{\gamma}_i = y^*_i/l_i$ for
+  $i = 1, \ldots, p$ \pause
+\item  $\Var(\hat{\gamma}_i) = \sigma^2/l_i^2$
+  \end{itemize}
+Directions in $\X$ space $\U_j$ with small eigenvectors $l_i$ have
+the largest variances.  Unstable directions.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Ridge  Regression \& Independent Prior}
+  (Another) Normal Conjugate Prior Distribution on $\g$: $$\g \mid \phi \sim \N(\zero_p, \frac{1}{ \phi
+    k} \I_p)$$ \pause
+
+Posterior mean
+$$
+ \tilde{\g} =( L^TL + k \I)^{-1} L^T \U^T_p\Y  = ( L^TL + k \I)^{-1}
+ L^TL\hat{\g}
+$$\pause
+
+ $$\tilde{\gamma}_i = \frac{l_i^2}{l_i^2 + k} \hat{\gamma}_i =
+ \frac{\lambda_i}{\lambda_i + k} \hat{\gamma}_i $$ \pause
+ \begin{itemize}
+\item When $\lambda_i \to 0$ then $\tilde{\gamma}_i \to 0$
+
+\item When $k \to 0$ we get OLS back but if $k$ gets too  big posterior
+  mean goes to zero.
+ \end{itemize}
+
+\end{frame}
+\begin{frame}
+  \frametitle{Transform}
+  \begin{itemize}
+  \item
+  Transform back $\tilde{\b} = \V \tilde{\g}$ \pause
+  $$\tilde{\b} = (\X^T\X + k \I)^{-1}  \X^T\X \bhat$$ \pause
+\item importance of standardizing \pause
+
+\item Is there a value of $k$ for which ridge is better in terms of
+  Expected MSE than OLS? \pause
+\item Choice of $k$?
+  \end{itemize}
+\end{frame}
+\begin{frame}\frametitle{MSE}
+Can show that
+ $$\E[(\b - \btilde)^T(\b - \btilde)] = \E[(\g - \tilde{\g})^T(\g - \tilde{\g}]$$
+  \pause
+ \begin{itemize}
+ \item $\Var(\tilde{\gamma}_i) = \sigma^2 l_i^2 /(l_i^2 +
+   k)^2$ \pause
+\item  Bias of $\tilde{\g}$ is $-k \gamma_i/(l_i^2 + k)$ \pause
+ \item  MSE $$\sigma^2 \sum_i \frac{l_i^2}{(l_i^2 + k)^2} +  k^2
+   \sum_i \frac{\gamma_i^2} {(l_i^2 + k)^2} $$
+ \end{itemize}
+The derivative with respect to $k$ is negative at $k=0$, hence the
+function is decreasing. \pause
+
+\vspace{12pt}
+Since $k = 0$ is OLS, this means that is a value of $k$ that will
+always be better than OLS
+\end{frame}
+
+\begin{frame}  \frametitle{Alternative Motivation}
+  \begin{itemize}
+  \item If  $\bhat$ is unconstrained  expect high variance with nearly
+    singular $\X$ \pause
+  \item Let $\Y^c = (\I - \P_1) \Y$  and $\X^c$ the centered and
+    standardized  $\X$ matrix \pause
+\item Control how large coefficients may grow \pause
+    $$\min_{\b} (\Y^c - \X^c \b)^T (\Y^c - \X^c\b)$$
+    subject to
+    $$ \sum \beta_j^2 \le t$$ \pause
+  \item Equivalent Quadratic Programming Problem
+    $$\min_{\b} \| \Y^c - \X^c \b\|^2 + k \|\b\|^2$$ \pause
+  \item ``penalized'' likelihood \pause
+  \end{itemize}
+\end{frame}
+\begin{frame}\frametitle{Picture}
+
+\end{frame}
+
+
+
+
+
+
+
+\end{document}
+

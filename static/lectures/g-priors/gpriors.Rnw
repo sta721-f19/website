@@ -102,7 +102,7 @@ $$p(\beta_0, \phi) \propto 1/\phi$$
 
 \begin{eqnarray*}
 \Y & = & \one \alpha_0 + \X_1 \b + \eps \\
-p(\alpha_0, \phi) & \propto & 1 \\
+p(\alpha_0, \phi) & \propto & 1/\phi \\
 \b \mid \phi & \sim & \N(\zero, \frac{g}{\phi} (\X^T (\I_n - \P_{\one}) \X)^{-1})
 \end{eqnarray*}\pause
 
@@ -110,7 +110,7 @@ Equivalent to
 \begin{eqnarray*}
 \Y & = & \one \beta_0 + \I_n - \P_1) \X_1 \b + \eps \\
 \beta_0 & = & \alpha + \bar{\x}^T \b \\
-p(\beta_0, \phi) & \propto & 1 \\
+p(\beta_0, \phi) & \propto & 1\phi \\
 \b \mid \phi & \sim & \N(\zero, \frac{g}{\phi} (\X^T (\I_n - \P_{\one}) \X)^{-1})
 \end{eqnarray*}
 \end{frame}

@@ -1,0 +1,30 @@
+\frametitle{Cp Solution}
+Min $C_p = SSE_p/\hat{\sigma}^2_F - n + 2 p$  \pause
+\begin{small}
+\begin{verbatim}
+> summary(longley.lars)
+LARS/LASSO
+Call: lars(x = as.matrix(longley[, -7]), y = longley[, 7], type = "lasso")
+   Df     Rss        Cp
+0   1 185.009 1976.7120
+1   2   6.642   59.4712
+2   3   3.883   31.7832
+3   4   3.468   29.3165
+4   5   1.563   10.8183
+5   4   1.339    6.4068
+6   5   1.024    5.0186
+7   6   0.998    6.7388
+8   7   0.907    7.7615
+9   6   0.847    5.1128
+10  7   0.836    7.0000
+\end{verbatim}
+\end{small}
+ \pause
+{\fontsize{9pt}{10pt} \selectfont
+\begin{verbatim}
+     GNP.deflator     GNP Unemployed Armed.Forces Population    Year
+[7,]     0.00000  0.00000   -0.01471     -0.00861   -0.15337 1.18430
+
+\end{verbatim}
+}
+

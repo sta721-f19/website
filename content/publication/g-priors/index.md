@@ -1,6 +1,6 @@
 ---
 draft: false
-featured: true
+featured: false
 abstract: "In this lecture we will go into more details about the Normal-Gamma conjugate prior looking at a special case of the g-prior."
 abstract_short: "In this lecture we will go into more details about the Normal-Gamma conjugate prior looking at a special case of the g-prior."
 authors:
