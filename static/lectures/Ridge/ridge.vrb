@@ -1,0 +1,22 @@
+\frametitle{Generalized Cross-validation}
+\begin{small}
+\begin{verbatim}
+> select(lm.ridge(Employed ~ ., data=longley,
+         lambda=seq(0, 0.1, 0.0001)))
+
+modified HKB estimator is 0.004275357
+modified L-W estimator is 0.03229531
+smallest value of GCV  at 0.0028
+
+> longley.RReg = lm.ridge(Employed ~ ., data=longley,
+                          lambda=0.0028)
+> coef(longley.RReg)
+           GNP.deflator    GNP     Unemployed  Armed.Forces
+-2.950e+03 -5.381e-04   -1.822e-02  -1.76e-02 -9.607e-03
+
+ Population     Year
+-1.185e-01  1.557e+00
+\end{verbatim}
+
+\end{small}
+
