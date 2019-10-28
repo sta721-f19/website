@@ -1,0 +1,207 @@
+\documentclass[handout]{beamer}
+%\documentclass[]{beamer}
+%\usepackage[dvips]{color}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,array,url}
+\input{../macros}
+\usepackage{verbatim}
+
+
+
+\title{Shrinkage Priors and Selection}
+\subtitle{Readings Chapter 15 Christensen}
+\institute{Merlise Clyde}
+\author{STA721 Linear Models Duke University}
+\date{\today}
+%\logo{duke.eps}
+
+\begin{document}
+\maketitle
+\begin{frame}
+  \frametitle{Bayesian Shrinkage}
+  \begin{eqnarray*}
+    \Y \mid \alpha, \b^s, \phi & \sim & \N(\one_n \alpha + \X^s \b^s, \I_n/\phi)  \pause\\
+    \b^s \mid \alpha, \phi, \taub, \lambda & \sim & \N(\zero, \diag(\taub^2)/\phi)  \pause\\
+    p(\alpha, \phi) & \propto& 1/\phi  \pause\\
+  \end{eqnarray*}
+
+prior on $\tau_j$ \pause
+
+Scale Mixture of Normals  (Andrews and Mallows 1974)
+\end{frame}
+
+
+
+
+\begin{frame}
+  \frametitle{Horseshoe}
+  Carvalho, Polson \& Scott  propose
+\begin{itemize}
+\item
+Prior Distribution on $$\b^s \mid \phi, \taub \sim \N(\zero_p, \frac{\diag(\taub^2)}{ \phi
+    }) $$ \pause
+\item $\tau_j \mid \lambda \simiid \Ca^+(0, \lambda^2)$   (difference in CPS notation) \pause
+\item $\lambda \sim \Ca^+(0, 1)$ \pause
+\item $p(\alpha, \phi) \propto 1/\phi)$ \pause
+\end{itemize}
+
+In the case $\lambda = \phi = 1$ and with canonical representation $\Y^* =
+\I \b + \eps$ \pause
+$$
+E[\beta_i \mid \Y] = \int_0^1 (1 - \kappa_i) y^*_i p(\kappa_i \mid \Y)
+\ d\kappa_i = (1 - \E[\kappa \mid y^*_i]) y^*_i$$
+where $\kappa_i = 1/(1 + \tau_i^2)$ shrinkage factor \pause
+
+\vspace{18pt}
+Half-Cauchy prior induces a Beta(1/2, 1/2) distribution on $\kappa_i$
+a priori
+\end{frame}
+
+
+\begin{frame} \frametitle{Horseshoe}
+  \includegraphics[height=3.5in]{beta}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Prior Comparison (from PSC)}
+  \includegraphics[height=3.5in]{densities}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Bounded Influence}
+Normal means case      $Y_i \simiid N(\beta_i, 1)$    (Equivalent to Canonical case)
+    \begin{columns}
+    \begin{column}{.48\textwidth}
+      \begin{itemize}
+      \item
+Posterior mean
+$E[\beta \mid y] = y + \frac{d} {d y} \log m(y)$
+where $m(y)$ is the predictive density under the prior (known $\lambda$) \pause
+\item HS has Bounded Influence: $$\lim_{|y| \to \infty} \frac{d}{dy} \log m(y) = 0$$ \pause
+\item $\lim_{|y| \to \infty} E[\beta \mid y) \to y $ (MLE)\pause
+\item DE is also bounded influence, but bound does not decay to zero in tails
+      \end{itemize}
+
+    \end{column}
+    \begin{column}{.48\textwidth}
+   \includegraphics[width=2in]{shrinkage}
+    \end{column}
+
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{R packages}
+  The {\tt monomvn} package in R includes
+  \begin{itemize}
+  \item blasso
+  \item bhs
+  \end{itemize}
+
+See Diabetes.R code
+
+
+
+\end{frame}
+
+%\begin{frame}
+%  \frametitle{Simulation Study with Diabetes Data}
+%  \includegraphics[height=3.5in]{diabetes}
+
+
+%\end{frame}
+
+\begin{frame}
+  \frametitle{Other Options}
+  Range of other scale mixtures used  \pause
+  \begin{itemize}
+  \item Generalized Double Pareto (Armagan, Dunson \& Lee)  \pause
+\begin{align*}
+ \tau_j^2 \mid \lambda & \sim \Exp(\lambda^2/2) \\
+  \lambda & \sim \Gam(\alpha, \eta) \\
+  \beta^s_j & \sim \textsf{GDP}(\xi = \eta/\alpha, \alpha)
+\end{align*}
+\pause
+$$
+f(\beta^s_j) = \frac{1}{2 \xi} (1 + \frac{|\beta^s_j|}{\xi \alpha})^{-(1 + \alpha)}
+$$
+
+see \url{http://arxiv.org/pdf/1104.0861.pdf} \pause
+  \item Normal-Exponenetial-Gamma (Griffen \& Brown 2005)
+$\lambda^2 \sim \Gam(\alpha, \eta)$
+  \pause
+  \item Bridge - Power Exponential Priors  (Stable mixing density) \pause
+
+   \end{itemize}
+See the monomvn package on CRAN \pause
+
+\vfill
+
+Choice of prior?   Properties?
+\end{frame}
+
+\begin{frame} \frametitle{Properties for Penalty for Modal Estimates}
+Fan \& Li (JASA 2001) discuss Variable
+selection via nonconcave penalties and oracle properties  \pause
+\begin{itemize}
+\item Model $Y = \X \b + \eps$ \pause
+\item Assume $\X^T\X = \I_p$  (orthonormal) and $\eps \sim N(0, \I_n)$\pause
+\item Penalized Likelihood
+$$\frac 1 2 \|\Y - \hat{\Y}\|^2 + \frac 1 2 \sum_j(\beta_j - \hat{\beta}_j)^2 +  \sum_j p_\lambda(|\beta_j|)$$ \pause
+duality $ p_\lambda(|\beta|)$ is negative log prior
+
+\item Requirements on penality \pause
+\begin{itemize}
+  \item Unbiasedness: for large $|\beta_j|$ \pause
+  \item Sparsity: thresholding rule sets small coefficients to 0 \pause
+  \item Continuity:  continuous in $\hat{\beta}_j$
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame} \frametitle{Conditions}
+Derivative of  $\frac 1 2 \sum_j(\beta_j - \hat{\beta}_j)^2 +  \sum_j p_\lambda(|\beta_j|)$
+is
+
+$$\sgn(\beta_j)\left\{|\beta_j| + p^\prime_\lambda(|\beta_j|) \right\} - \hat{\beta}_j$$
+
+Conditions:
+
+\begin{itemize}
+\item unbiased: if $ p^\prime_\lambda(|\beta|) = 0$ for large $|\beta|$; estimator is $\hat{\beta}_j$
+\item thresholding: $\min \left\{ |\beta_j| + p^\prime_\lambda(|\beta_j|)\right\} > 0$ then estimator is 0 if $|\hat{\beta}_j| < \min \left\{ |\beta_j| + p^\prime_\lambda(|\beta_j|) \right\} $
+\item continuity:  minimum of $|\beta_j| + p^\prime_\lambda(|\beta_j|)$ is at zero
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Choice?}
+\begin{itemize}
+\item Lasso does not satisfy conditions
+\item GDP does ?
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Choice of Estimator \& Selection?}
+
+  \begin{itemize}
+  \item Posterior Mode (may set some coefficients to zero) \pause
+  \item Posterior Mean (no selection, just shrinkage) (Squared error loss)
+  \item Minimize $L_1$ posterior loss  $\E[|\beta_j - a |]$  (Shrinkage and Selection) \pause
+  \end{itemize}
+  Bayesian Posterior does not assign any probability to $\beta^s_j = 0$ \pause
+
+  \begin{itemize}
+  \item Selection solved as a post-analysis decision problem \pause
+  \item Selection part of model uncertainty $\Rightarrow$ add prior \pause
+    probability that $\beta^s_j = 0$  and combine with decision problem
+  \end{itemize}
+Remember all models are wrong, but some may be useful!
+\end{frame}
+
+
+\end{document}
+
